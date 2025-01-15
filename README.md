@@ -15,7 +15,8 @@
 
   - Include true orbit server config in your Nginx config under the http block
   ```
-    include /etc/nginx/external-config/true-orbit.conf;
+    include /opt/homebrew/etc/nginx/external-config/true-orbit.conf;
   ```
+  - add `local.trueorbit.me` to your /etc/hosts file
 
   - restart Nginx
