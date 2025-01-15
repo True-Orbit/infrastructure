@@ -13,7 +13,7 @@
   curl -o /opt/homebrew/etc/nginx/external-config/true-orbit.conf https://raw.githubusercontent.com/True-Orbit/infrastructure/main/local-nginx.conf
   ```
 
-  - Include true orbit server config in your Nginx server config
+  - Include true orbit server config in your Nginx config under the http block
   ```
     include /etc/nginx/external-config/true-orbit.conf;
   ```
