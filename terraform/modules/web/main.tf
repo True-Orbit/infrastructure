@@ -1,5 +1,5 @@
 locals { 
-  port = 4000
+  port = 3000
 }
 
 resource "aws_security_group" "core_server_sg" {
