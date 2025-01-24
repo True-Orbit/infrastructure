@@ -35,3 +35,12 @@ module "core_server" {
   ecs_cluster_id = module.foundation.ecs_cluster_id
   subnet_id      = module.foundation.private_subnet_id
 }
+
+module "core_rds" {
+  source = "./modules/core_rds"
+  environment = var.environment
+  vpc_id = module.foundation.vpc_id
+  subnet_ids = [module.foundation.private_subnet_id]
+  CORE_RDS_USERNAME = var.CORE_RDS_USERNAME
+  CORE_RDS_PASSWORD = var.CORE_RDS_PASSWORD
+}

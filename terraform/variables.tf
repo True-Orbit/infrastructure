@@ -21,3 +21,14 @@ variable "core_server_image_tag" {
   description = "The tag for the Docker image"
   default     = "latest"
 }
+
+variable "CORE_RDS_USERNAME" {
+  description = "The database admin username"
+  type        = string
+}
+
+variable "CORE_RDS_PASSWORD" {
+  description = "The database admin password"
+  type        = string
+  sensitive   = true
+}

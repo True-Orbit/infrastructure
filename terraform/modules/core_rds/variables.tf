@@ -3,45 +3,28 @@ variable "environment" {
   type        = string
 }
 
-variable "db_instance_identifier" {
+variable "rds_identifier" {
   description = "The identifier for the RDS instance"
   type        = string
+  default     = "core-rds-instance"
 }
 
 variable "db_name" {
   description = "The name of the database"
   type        = string
-}
-
-variable "username" {
-  description = "The database admin username"
-  type        = string
-}
-
-variable "password" {
-  description = "The database admin password"
-  type        = string
-  sensitive   = true
-}
-
-variable "engine" {
-  description = "The database engine (e.g., mysql, postgres)"
-  type        = string
-}
-
-variable "engine_version" {
-  description = "The database engine version"
-  type        = string
+  default     = "core-db"
 }
 
 variable "instance_class" {
   description = "The instance type for the RDS instance"
   type        = string
+  default     = "db.t3.micro"
 }
 
 variable "allocated_storage" {
   description = "The allocated storage in gigabytes"
   type        = number
+  default     = 20
 }
 
 variable "storage_type" {
@@ -57,16 +40,6 @@ variable "vpc_id" {
 
 variable "subnet_ids" {
   description = "List of subnet IDs for the DB subnet group"
-  type        = list(string)
-}
-
-variable "security_group_ids" {
-  description = "List of security group IDs to associate with the RDS instance"
-  type        = list(string)
-}
-
-variable "allowed_security_group_ids" {
-  description = "List of security group IDs allowed to access the RDS instance"
   type        = list(string)
 }
 
@@ -92,4 +65,15 @@ variable "skip_final_snapshot" {
   description = "Whether to skip the final snapshot before deletion"
   type        = bool
   default     = true
+}
+
+variable "CORE_RDS_USERNAME" {
+  description = "The database admin username"
+  type        = string
+}
+
+variable "CORE_RDS_PASSWORD" {
+  description = "The database admin password"
+  type        = string
+  sensitive   = true
 }

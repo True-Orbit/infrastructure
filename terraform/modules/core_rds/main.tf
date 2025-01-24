@@ -1,58 +1,62 @@
+locals {
+  db_name = "${var.environment}-${var.db_name}"
+  rds_identifier = "${var.environment}-${var.rds_identifier}"
+}
+
 resource "aws_db_subnet_group" "this" {
   name       = "${var.environment}-db-subnet-group"
   subnet_ids = var.subnet_ids
 
   tags = {
-    Name = "${var.environment}-db-subnet-group"
+    name = "core-rds-subnet-group"
+    app  = "true-orbit"
+    env  = var.environment
   }
 }
 
-resource "aws_security_group" "rds_sg" {
+resource "aws_security_group" "core_rds_sg" {
   name        = "${var.environment}-rds-sg"
   description = "Security group for RDS instance"
   vpc_id      = var.vpc_id
 
-  ingress {
-    description      = "Allow access from ECS tasks"
-    from_port        = 4000
-    to_port          = 4000
-    protocol         = "tcp"
-    security_groups  = var.allowed_security_group_ids
-  }
-
-  egress {
-    description = "Allow all outbound traffic"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   tags = {
-    Name        = "true-orbit-${var.environment}-rds-sg"
-    Environment = var.environment
+    name = "core-rds-sg"
+    env  = var.environment
+    app  = "true-orbit"
   }
 }
 
+resource "aws_security_group_rule" "core_rds_sg_ingress" {
+  type              = "ingress"
+  description       = "Allow inbound on port 5432 for core server"
+  from_port         = 5432
+  to_port           = 5432
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.core_rds_sg.id
+}
+
 resource "aws_db_instance" "core-rds" {
-  identifier              = var.db_instance_identifier
-  engine                  = var.engine
-  engine_version          = var.engine_version
+  identifier              = local.rds_identifier
+  engine                  = "postgres"
+  engine_version          = "17.2"
   instance_class          = var.instance_class
   allocated_storage       = var.allocated_storage
-  storage_type            = var.storage_type
+  storage_type            = "gp2"
   db_subnet_group_name    = aws_db_subnet_group.this.name
-  vpc_security_group_ids  = var.security_group_ids
+  vpc_security_group_ids  = [aws_security_group.core_rds_sg.id]
   publicly_accessible     = false
   multi_az                = var.multi_az
   storage_encrypted       = var.storage_encrypted
-  username                = var.username
-  password                = var.password
-  db_name                 = var.db_name
+  username                = var.CORE_RDS_USERNAME
+  password                = var.CORE_RDS_PASSWORD
+  db_name                 = local.db_name
   port                    = var.port
-  skip_final_snapshot     = var.skip_final_snapshot
+  skip_final_snapshot     = var.environment == "production"
 
   tags = {
-    Environment = var.environment
+    env = var.environment
+    app = "true-orbit"
+    name = "core-rds-instance"
   }
 }
