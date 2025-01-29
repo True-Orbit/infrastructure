@@ -48,8 +48,8 @@ resource "aws_db_instance" "core-rds" {
   publicly_accessible     = false
   multi_az                = var.multi_az
   storage_encrypted       = var.storage_encrypted
-  username                = var.CORE_RDS_USERNAME
-  password                = var.CORE_RDS_PASSWORD
+  username                = "${var.environment}${var.core_rds_username}"
+  password                = var.core_rds_password
   db_name                 = local.db_name
   port                    = var.port
   skip_final_snapshot     = var.environment == "production"

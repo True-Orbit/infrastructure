@@ -34,3 +34,13 @@ variable "desired_count" {
   type        = number
   default     = 1
 }
+
+variable "alb_arn" {
+  description = "The ARN of the ALB"
+  type        = string
+}
+
+variable "ecs_iam_role_arn" {
+  description = "The ARN of the ECS task execution role"
+  type        = string
+}

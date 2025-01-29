@@ -67,12 +67,12 @@ variable "skip_final_snapshot" {
   default     = true
 }
 
-variable "CORE_RDS_USERNAME" {
+variable "core_rds_username" {
   description = "The database admin username"
   type        = string
 }
 
-variable "CORE_RDS_PASSWORD" {
+variable "core_rds_password" {
   description = "The database admin password"
   type        = string
   sensitive   = true

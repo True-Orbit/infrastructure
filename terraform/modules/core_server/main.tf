@@ -3,8 +3,8 @@ locals {
 }
 
 resource "aws_security_group" "core_server_sg" {
-  name        = "true-orbit-${var.environment}-default-sg"
-  description = "Default security group for ECS tasks"
+  name        = "true-orbit-${var.environment}-core-server-sg"
+  description = "core-server security group for ECS tasks"
   vpc_id      = var.vpc_id
 
   tags = {
@@ -24,12 +24,24 @@ resource "aws_security_group_rule" "http_ingress" {
   security_group_id = aws_security_group.core_server_sg.id
 }
 
+resource "aws_security_group_rule" "http_egress" {
+  type              = "egress"
+  description       = "Allow outbount on any port"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.core_server_sg.id
+}
+
+
 resource "aws_ecs_task_definition" "core_server_task" {
   family                   = "core-server-task"
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
   memory                   = "512"
   network_mode             = "awsvpc"
+  execution_role_arn       = var.ecs_iam_role_arn
 
   container_definitions = jsonencode([
     {
