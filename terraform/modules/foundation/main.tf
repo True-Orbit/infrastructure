@@ -7,6 +7,14 @@ resource "aws_vpc" "this" {
   }
 }
 
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.this.id
+
+  tags = {
+    Name = "main-internet-gateway"
+  }
+}
+
 resource "aws_subnet" "public_a" {
   vpc_id                  = aws_vpc.this.id
   cidr_block              = var.public_subnet_cidr_block1

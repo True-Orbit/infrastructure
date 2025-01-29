@@ -12,7 +12,7 @@ variable "rds_identifier" {
 variable "db_name" {
   description = "The name of the database"
   type        = string
-  default     = "core-db"
+  default     = "Core"
 }
 
 variable "instance_class" {

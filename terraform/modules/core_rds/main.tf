@@ -1,5 +1,5 @@
 locals {
-  db_name = "${var.environment}-${var.db_name}"
+  db_name = "${var.environment}${var.db_name}"
   rds_identifier = "${var.environment}-${var.rds_identifier}"
 }
 

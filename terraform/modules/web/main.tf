@@ -45,7 +45,7 @@ resource "aws_ecs_task_definition" "web_task" {
   container_definitions = jsonencode([
     {
       name  = "web-container"
-      image = "${var.repository_url}:${var.image_tag}"
+      image = "${var.repository_url}:${var.environment}-${var.image_tag}"
       portMappings = [
         {
           containerPort = local.port
@@ -57,7 +57,7 @@ resource "aws_ecs_task_definition" "web_task" {
 
 resource "aws_lb_target_group" "web_target_group" {
   name        = "service-target"
-  port        = 80
+  port        = 3000
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
