@@ -1,6 +1,7 @@
 locals {
   db_name = "${var.environment}${var.db_name}"
   rds_identifier = "${var.environment}-${var.rds_identifier}"
+  port = 5432
 }
 
 resource "aws_db_subnet_group" "this" {
@@ -28,9 +29,9 @@ resource "aws_security_group" "core_rds_sg" {
 
 resource "aws_security_group_rule" "core_rds_sg_ingress" {
   type              = "ingress"
-  description       = "Allow inbound on port 5432 for core server"
-  from_port         = 5432
-  to_port           = 5432
+  description       = "Allow inbound on port ${local.port} for core server"
+  from_port         = local.port
+  to_port           = local.port
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.core_rds_sg.id

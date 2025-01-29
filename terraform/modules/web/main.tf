@@ -57,7 +57,7 @@ resource "aws_ecs_task_definition" "web_task" {
 
 resource "aws_lb_target_group" "web_target_group" {
   name        = "service-target"
-  port        = 3000
+  port        = local.port
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
@@ -97,6 +97,6 @@ resource "aws_ecs_service" "web_service" {
   load_balancer {
     target_group_arn = aws_lb_target_group.web_target_group.arn
     container_name   = "web-container"
-    container_port   = 80
+    container_port   = local.port
   }
 }
