@@ -7,7 +7,6 @@ runs:
   steps:
     - name: Checkout Infrastructure Repo
       uses: actions/checkout@v4
-      path: terraform
 
     - name: Configure AWS Credentials and Assume Role
       uses: aws-actions/configure-aws-credentials@v4
