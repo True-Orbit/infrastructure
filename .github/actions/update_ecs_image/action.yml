@@ -4,13 +4,10 @@ description: Redeploy ECS service with the latest image
 runs:
   using: "composite"
 
-  defaults:
-    run:
-      working-directory: terraform
-
   steps:
     - name: Checkout Infrastructure Repo
       uses: actions/checkout@v4
+      path: terraform
 
     - name: Configure AWS Credentials and Assume Role
       uses: aws-actions/configure-aws-credentials@v4
@@ -26,9 +23,12 @@ runs:
 
     - name: Terraform Init
       run: terraform init
+      shell: bash
 
     - name: Terraform Plan with Target
       run: terraform plan -target=module.web_service -out=plan.out -input=false
+      shell: bash
 
     - name: Terraform Apply with Target
       run: terraform apply "plan.out" -auto-approve -input=false
+      shell: bash
