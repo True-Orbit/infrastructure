@@ -1,10 +1,6 @@
 name: Trigger Terraform Apply on Web's ECS Cluster
 
 on:
-  pull_request:
-    branches:
-      - main
-      
   repository_dispatch:
     types: [redeploy_web_service]
 
