@@ -1,6 +1,10 @@
 name: Trigger Terraform Apply on Web's ECS Cluster
 
 on:
+  pull_request:
+    branches:
+      - main
+      
   repository_dispatch:
     types: [redeploy_web_service]
 
@@ -43,8 +47,8 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan with Target
-        run: terraform plan -target=module.web_service -out=plan.out
+        run: terraform plan -target=module.web_service -out=plan.out -input=false
 
       - name: Terraform Apply with Target
-        run: terraform apply "plan.out" -auto-approve
+        run: terraform apply "plan.out" -auto-approve -input=false
           
