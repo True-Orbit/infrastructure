@@ -22,6 +22,8 @@ jobs:
     env:
       AWS_REGION: ${{ github.event.inputs.region }}
       AWS_ECS_ROLE_ARN: ${{ secrets.AWS_ECS_ROLE_ARN }}
+      IMAGE_TAG: ${{ github.event.inputs.image_tag }}
+      ENVIRONMENT: ${{ github.event.inputs.environment }}
 
     permissions:
       contents: read
@@ -31,24 +33,11 @@ jobs:
       - name: Checkout Infrastructure Repo
         uses: actions/checkout@v4
 
-      - name: Configure AWS Credentials and Assume Role
-        uses: aws-actions/configure-aws-credentials@v4
+      - uses: ./.github/actions/update_ecs_image
         with:
-          aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: ${{ env.AWS_ECS_ROLE_ARN }}
-          role-session-name: DeployWebService
-
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.10.4
-
-      - name: Terraform Init
-        run: terraform init
-
-      - name: Terraform Plan with Target
-        run: terraform plan -target=module.web_service -out=plan.out -input=false
-
-      - name: Terraform Apply with Target
-        run: terraform apply "plan.out" -auto-approve -input=false
+          AWS_REGION: ${{ env.AWS_REGION }}
+          AWS_ECS_ROLE_ARN: ${{ env.AWS_ECS_ROLE_ARN }}
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
+          ENVIRONMENT: ${{ env.ENVIRONMENT }}
+          
           
