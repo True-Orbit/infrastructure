@@ -23,6 +23,10 @@ jobs:
       AWS_REGION: ${{ github.event.inputs.region }}
       AWS_ECS_ROLE_ARN: ${{ secrets.AWS_ECS_ROLE_ARN }}
 
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
       - name: Checkout Infrastructure Repo
         uses: actions/checkout@v4
