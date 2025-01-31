@@ -37,7 +37,7 @@ jobs:
       - name: Checkout Infrastructure Repo
         uses: actions/checkout@v4
 
-      - uses: ./.github/actions/update_ecs_image
+      - uses: ../.github/actions/update_ecs_image
         with:
           AWS_REGION: ${{ env.AWS_REGION }}
           AWS_ECS_ROLE_ARN: ${{ env.AWS_ECS_ROLE_ARN }}
