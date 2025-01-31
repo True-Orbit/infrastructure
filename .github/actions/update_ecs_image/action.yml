@@ -8,6 +8,8 @@ runs:
     - name: Checkout Infrastructure Repo
       uses: actions/checkout@v4
 
+    - working-directory: ${{ github.workspace }}/infrastructure
+
     - name: Configure AWS Credentials and Assume Role
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -22,15 +24,12 @@ runs:
 
     - name: Terraform Init
       run: terraform init
-      working-directory: ${{ github.workspace }}/infrastructure
       shell: bash
 
     - name: Terraform Plan with Target
       run: terraform plan -target=module.web_service -out=plan.out -input=false
-      working-directory: ${{ github.workspace }}/infrastructure
       shell: bash
 
     - name: Terraform Apply with Target
       run: terraform apply "plan.out" -auto-approve -input=false
-      working-directory: ${{ github.workspace }}/infrastructure
       shell: bash
