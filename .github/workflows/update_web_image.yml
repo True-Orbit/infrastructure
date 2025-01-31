@@ -29,6 +29,11 @@ jobs:
       contents: read
       id-token: write
 
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./terraform
+
     steps:
       - name: Checkout Infrastructure Repo
         uses: actions/checkout@v4
