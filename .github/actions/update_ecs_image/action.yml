@@ -9,6 +9,7 @@ runs:
       uses: actions/checkout@v4
 
     - name: Print GitHub workspace
+      shell: bash
       run: echo "Current directory: ${{ github.workspace }}"
 
     - name: Configure AWS Credentials and Assume Role
