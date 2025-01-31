@@ -8,7 +8,7 @@ runs:
     - name: Checkout Infrastructure Repo
       uses: actions/checkout@v4
 
-    - working-directory: ${{ github.workspace }}/infrastructure
+    - working-directory: ${{ github.workspace }}/terraform
 
     - name: Configure AWS Credentials and Assume Role
       uses: aws-actions/configure-aws-credentials@v4
