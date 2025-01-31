@@ -18,15 +18,16 @@ on:
 jobs:
   terraform_apply:
     runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
 
     env:
       AWS_REGION: ${{ github.event.inputs.region }}
       AWS_ECS_ROLE_ARN: ${{ secrets.AWS_ECS_ROLE_ARN }}
       IMAGE_TAG: ${{ github.event.inputs.image_tag }}
       ENVIRONMENT: ${{ github.event.inputs.environment }}
-      TF_VAR_CORE_RDS_USERNAME: ${{ secrets.TF_VAR_core_rds_username }}
-      TF_VAR_CORE_RDS_PASSWORD: ${{ secrets.TF_VAR_core_rds_password }}
-      TF_VAR_HOSTED_ZONE_ID: ${{ secrets.TF_VAR_hosted_zone_id }}
+      TF_VAR_CORE_RDS_USERNAME: ${{ secrets.TF_VAR_CORE_RDS_USERNAME }}
+      TF_VAR_CORE_RDS_PASSWORD: ${{ secrets.TF_VAR_CORE_RDS_PASSWORD }}
+      TF_VAR_HOSTED_ZONE_ID: ${{ secrets.TF_VAR_HOSTED_ZONE_ID }}
 
     permissions:
       contents: read
