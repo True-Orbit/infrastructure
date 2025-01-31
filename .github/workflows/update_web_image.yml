@@ -58,7 +58,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan with Target
-        run: terraform plan -target=module.web_service -out=plan.out -input=false
+        run: terraform plan
 
       # - name: Terraform Apply with Target
       #   run: terraform apply plan.out -auto-approve -input=false
