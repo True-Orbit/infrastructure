@@ -9,15 +9,13 @@ on:
       environment:
         required: true
         default: development
-      image_tag:
-        required: true
       region:
         required: true
         default: us-west-2
       core_server_image_tag:
-        required: true
+        required: false
       web_service_image_tag:
-        required: true
+        required: false
 
 jobs:
   terraform_apply:
@@ -27,7 +25,6 @@ jobs:
     env:
       AWS_REGION: ${{ github.event.inputs.region }}
       AWS_ECS_ROLE_ARN: ${{ secrets.AWS_ECS_ROLE_ARN }}
-      IMAGE_TAG: ${{ github.event.inputs.image_tag }}
       ENVIRONMENT: ${{ github.event.inputs.environment }}
       TF_VAR_core_rds_username: ${{ secrets.TF_VAR_CORE_RDS_USERNAME }}
       TF_VAR_core_rds_password: ${{ secrets.TF_VAR_CORE_RDS_PASSWORD }}
