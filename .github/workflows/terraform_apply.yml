@@ -56,6 +56,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.10.4
+          terraform_wrapper: false
 
       - name: Terraform Init
         run: terraform init
@@ -63,7 +64,7 @@ jobs:
       - name: Set Terraform output as an environment variable
         id: set-outputs
         run: |
-          echo $(terraform output -raw web_image_tag | head -n 1)
+          echo $(terraform output -raw web_image_tag)
       # echo "WEB_IMAGE_TAG=$(terraform output -raw web_image_tag)" >> $GITHUB_ENV
 
       - name: Terraform Plan with Target
