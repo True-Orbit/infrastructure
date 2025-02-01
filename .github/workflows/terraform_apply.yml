@@ -69,6 +69,9 @@ jobs:
         run: |
           echo "TF_VAR_CORE_SERVER_IMAGE_TAG=$(terraform output -raw core_server_image_tag)" >> $GITHUB_ENV
 
+      - name: Print all environment variables
+        run: printenv
+
       - name: Terraform Plan with Target
         run: terraform plan
 
