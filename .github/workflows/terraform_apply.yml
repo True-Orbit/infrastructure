@@ -63,14 +63,14 @@ jobs:
 
       - name: Get old web image tag
         run: |
-          echo "TF_VAR_WEB_IMAGE_TAG=$(terraform output -raw web_image_tag)" >> $GITHUB_ENV
+          echo "TF_VAR_old_web_service_image_tag=$(terraform output -raw web_image_tag)" >> $GITHUB_ENV
 
       - name: Get old core server image tag
         run: |
-          echo "TF_VAR_CORE_SERVER_IMAGE_TAG=$(terraform output -raw core_server_image_tag)" >> $GITHUB_ENV
+          echo "TF_VAR_old_core_server_image_tag=$(terraform output -raw core_server_image_tag)" >> $GITHUB_ENV
 
       - name: Print all environment variables
-        run: printenv
+        run: printenv | grep TF_VAR
 
       - name: Terraform Plan with Target
         run: terraform plan

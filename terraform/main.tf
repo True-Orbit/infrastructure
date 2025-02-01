@@ -28,8 +28,8 @@ data "terraform_remote_state" "current_images" {
 }
 
 locals {
-  web_image_tag = var.web_service_image_tag != null ? "${module.ecr_web.repository_url}:${var.web_service_image_tag}" : data.terraform_remote_state.current_images.outputs.web_image_tag
-  core_server_image_tag = var.core_server_image_tag != null ? "${module.ecr_core_server.repository_url}:${var.core_server_image_tag}" : data.terraform_remote_state.current_images.outputs.core_server_image_tag
+  core_server_image_tag = var.core_server_image_tag != "" ? "${module.ecr_core_server.repository_url}:${var.core_server_image_tag}" : var.old_core_server_image_tag
+  web_image_tag         = var.web_service_image_tag != "" ? "${module.ecr_web.repository_url}:${var.web_service_image_tag}" : var.old_web_service_image_tag
 }
 
 provider "aws" {

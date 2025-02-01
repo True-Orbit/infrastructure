@@ -21,9 +21,19 @@ variable "core_server_image_tag" {
   description = "The tag for the Docker image"
 }
 
+variable "old_core_server_image_tag" {
+  type        = string
+  description = "The tag for the old Docker image"
+}
+
 variable "web_service_image_tag" {
   type        = string
   description = "The tag for the Docker image"
+}
+
+variable "old_web_service_image_tag" {
+  type        = string
+  description = "The tag for the old Docker image"
 }
 
 variable "core_rds_username" {
