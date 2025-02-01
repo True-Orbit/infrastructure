@@ -16,6 +16,22 @@ terraform {
   }
 }
 
+data "terraform_remote_state" "current_images" {
+  backend = "s3"
+  config = {
+    bucket         = "true-orbit-infrastructure"
+    key            = "terraform.tfstate"
+    region         = "us-west-2"
+    encrypt        = true
+    dynamodb_table = "terraform-lock"
+  }
+}
+
+locals {
+  web_image_tag = var.web_service_image_tag != null ? "${module.ecr_web.repository_url}:${var.web_service_image_tag}" : data.terraform_remote_state.current_images.outputs.web_image_tag
+  core_server_image_tag = var.core_server_image_tag != null ? "${module.ecr_core_server.repository_url}:${var.core_server_image_tag}" : data.terraform_remote_state.current_images.outputs.core_server_image_tag
+}
+
 provider "aws" {
   region = var.aws_region
 }
@@ -65,7 +81,7 @@ module "core_server" {
   source           = "./modules/core_server"
   environment      = var.environment
   repository_url   = module.ecr_core_server.repository_url
-  image_tag        = var.core_server_image_tag
+  image_tag        = local.core_server_image_tag
   vpc_id           = module.foundation.vpc_id
   ecs_cluster_id   = module.foundation.ecs_cluster_id
   subnet_id        = module.foundation.private_subnet_a_id
@@ -76,7 +92,7 @@ module "web_service" {
   source           = "./modules/web"
   environment      = var.environment
   repository_url   = module.ecr_web.repository_url
-  image_tag        = var.web_service_image_tag
+  image_tag        = local.web_image_tag
   vpc_id           = module.foundation.vpc_id
   ecs_cluster_id   = module.foundation.ecs_cluster_id
   subnet_id        = module.foundation.private_subnet_a_id

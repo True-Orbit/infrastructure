@@ -1,0 +1,77 @@
+name: Trigger Terraform Apply on Web's ECS Cluster
+
+on:
+  repository_dispatch:
+    types: [redeploy_web_service]
+
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        default: development
+      image_tag:
+        required: true
+      region:
+        required: true
+        default: us-west-2
+      core_server_image_tag:
+        required: true
+      web_service_image_tag:
+        required: true
+
+jobs:
+  terraform_apply:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+
+    env:
+      AWS_REGION: ${{ github.event.inputs.region }}
+      AWS_ECS_ROLE_ARN: ${{ secrets.AWS_ECS_ROLE_ARN }}
+      IMAGE_TAG: ${{ github.event.inputs.image_tag }}
+      ENVIRONMENT: ${{ github.event.inputs.environment }}
+      TF_VAR_core_rds_username: ${{ secrets.TF_VAR_CORE_RDS_USERNAME }}
+      TF_VAR_core_rds_password: ${{ secrets.TF_VAR_CORE_RDS_PASSWORD }}
+      TF_VAR_hosted_zone_id: ${{ secrets.TF_VAR_HOSTED_ZONE_ID }}
+      TF_VAR_web_service_image_tag: ${{ github.event.inputs.web_service_image_tag }}
+      TF_VAR_core_server_image_tag: ${{ github.event.inputs.core_server_image_tag }}
+
+    permissions:
+      contents: read
+      id-token: write
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: terraform
+
+    steps:
+      - name: Checkout Infrastructure Repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials and Assume Role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ env.AWS_ECS_ROLE_ARN }}
+          role-session-name: DeployWebService
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.10.4
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Set Terraform output as an environment variable
+        id: set-outputs
+        run: |
+          echo "WEB_IMAGE_TAG=$(terraform output web_image_tag)" >> $GITHUB_ENV
+
+      - name: Terraform Plan with Target
+        run: terraform plan
+
+      # - name: Terraform Apply with Target
+      #   run: terraform apply plan.out -auto-approve -input=false
+          
+          
