@@ -45,7 +45,7 @@ resource "aws_ecs_task_definition" "web_task" {
   container_definitions = jsonencode([
     {
       name  = "web-container"
-      image = "${var.repository_url}:${var.environment}-${var.image_tag}"
+      image = var.image_tag
       portMappings = [
         {
           containerPort = local.port

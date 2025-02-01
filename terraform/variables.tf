@@ -19,7 +19,11 @@ variable "aws_az" {
 variable "core_server_image_tag" {
   type        = string
   description = "The tag for the Docker image"
-  default     = "latest"
+}
+
+variable "web_service_image_tag" {
+  type        = string
+  description = "The tag for the Docker image"
 }
 
 variable "core_rds_username" {
