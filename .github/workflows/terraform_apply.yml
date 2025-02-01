@@ -63,7 +63,8 @@ jobs:
       - name: Set Terraform output as an environment variable
         id: set-outputs
         run: |
-          echo "WEB_IMAGE_TAG=$(terraform output -raw web_image_tag)" >> $GITHUB_ENV
+          echo $(terraform output -raw web_image_tag | head -n 1)
+      # echo "WEB_IMAGE_TAG=$(terraform output -raw web_image_tag)" >> $GITHUB_ENV
 
       - name: Terraform Plan with Target
         run: terraform plan
