@@ -22,6 +22,12 @@ variable "core_server_image_tag" {
   default     = "latest"
 }
 
+variable "web_service_image_tag" {
+  type        = string
+  description = "The tag for the Docker image"
+  default     = "latest"
+}
+
 variable "core_rds_username" {
   description = "The database admin username"
   type        = string

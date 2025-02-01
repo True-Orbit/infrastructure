@@ -76,7 +76,7 @@ module "web_service" {
   source           = "./modules/web"
   environment      = var.environment
   repository_url   = module.ecr_web.repository_url
-  image_tag        = var.core_server_image_tag
+  image_tag        = var.web_service_image_tag
   vpc_id           = module.foundation.vpc_id
   ecs_cluster_id   = module.foundation.ecs_cluster_id
   subnet_id        = module.foundation.private_subnet_a_id

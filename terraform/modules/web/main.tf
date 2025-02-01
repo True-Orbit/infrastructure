@@ -1,5 +1,10 @@
+data "aws_ssm_parameter" "old_image_tag" {
+  name = "/true-orbit/${var.environment}/web_service_image_tag"
+}
+
 locals { 
   port = 3000
+  image_tag = var.image_tag != null ? "${var.repository_url}:${var.image_tag}" : data.aws_ssm_parameter.old_image_tag.value
 }
 
 resource "aws_security_group" "web_sg" {
@@ -45,7 +50,7 @@ resource "aws_ecs_task_definition" "web_task" {
   container_definitions = jsonencode([
     {
       name  = "web-container"
-      image = "${var.repository_url}:${var.environment}-${var.image_tag}"
+      image = local.image_tag
       portMappings = [
         {
           containerPort = local.port
@@ -99,4 +104,10 @@ resource "aws_ecs_service" "web_service" {
     container_name   = "web-container"
     container_port   = local.port
   }
+}
+
+resource "aws_ssm_parameter" "new_image_tag" {
+  name  = "/true-orbit/${var.environment}/web_service_image_tag"
+  type  = "String"
+  value = local.image_tag
 }

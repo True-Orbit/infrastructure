@@ -1,5 +1,10 @@
+data "aws_ssm_parameter" "old_image_tag" {
+  name = "/true-orbit/${var.environment}/core_server_image_tag"
+}
+
 locals { 
   port = 4000
+  image_tag = var.image_tag != null ? "${var.repository_url}:${var.image_tag}" : aws_ecs_task_definition.current_core_server.container_definitions[0].image
 }
 
 resource "aws_security_group" "core_server_sg" {
@@ -46,7 +51,7 @@ resource "aws_ecs_task_definition" "core_server_task" {
   container_definitions = jsonencode([
     {
       name  = "core-server"
-      image = "${var.repository_url}:${var.environment}-${var.image_tag}"
+      image = local.image_tag
       portMappings = [
         {
           containerPort = local.port
@@ -67,4 +72,10 @@ resource "aws_ecs_service" "core_server_service" {
     subnets         = [var.subnet_id]
     security_groups = [aws_security_group.core_server_sg.id]
   }
+}
+
+resource "aws_ssm_parameter" "new_image_tag" {
+  name  = "/true-orbit/${var.environment}/core_server_image_tag"
+  type  = "String"
+  value = local.image_tag
 }
