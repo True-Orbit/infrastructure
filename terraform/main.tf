@@ -86,6 +86,7 @@ module "core_server" {
   ecs_cluster_id   = module.foundation.ecs_cluster_id
   subnet_id        = module.foundation.private_subnet_a_id
   ecs_iam_role_arn = module.iam.ecs_role_arn
+  alb_arn          = module.alb.alb_arn
 }
 
 module "web_service" {
