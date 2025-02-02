@@ -7,11 +7,8 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        required: true
+        required: false
         default: development
-      region:
-        required: true
-        default: us-west-2
       core_server_image_tag:
         required: false
       web_service_image_tag:
@@ -23,7 +20,7 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
 
     env:
-      AWS_REGION: ${{ github.event.inputs.region }}
+      ECS_REGION: us-west-2
       AWS_ECS_ROLE_ARN: ${{ secrets.AWS_ECS_ROLE_ARN }}
       ENVIRONMENT: ${{ github.event.inputs.environment }}
       TF_VAR_core_rds_username: ${{ secrets.TF_VAR_CORE_RDS_USERNAME }}
@@ -48,7 +45,7 @@ jobs:
       - name: Configure AWS Credentials and Assume Role
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ env.ECS_REGION }}
           role-to-assume: ${{ env.AWS_ECS_ROLE_ARN }}
           role-session-name: DeployWebService
 
