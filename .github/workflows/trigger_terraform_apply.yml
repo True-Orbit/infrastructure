@@ -1,4 +1,4 @@
-name: Trigger Terraform Apply
+name: Manually Trigger Terraform Apply
 
 on:
   workflow_dispatch:

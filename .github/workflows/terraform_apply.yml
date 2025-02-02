@@ -1,4 +1,4 @@
-name: Trigger Terraform Apply on Web's ECS Cluster
+name: Terraform Apply
 
 on:
   workflow_call:
