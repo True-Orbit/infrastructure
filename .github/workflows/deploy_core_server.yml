@@ -1,8 +1,8 @@
-name: Deploy Web Service
+name: Deploy Core Server
 
 on:
   repository_dispatch:
-    types: [deploy_web_service]
+    types: [deploy_core_server]
 
 jobs:
   deploy_web_service:
@@ -17,7 +17,7 @@ jobs:
     
     with:
       environment: ${{ github.event.client_payload.environment }}
-      web_service_image_tag: ${{ github.event.client_payload.image_tag }}
+      core_server_image_tag: ${{ github.event.client_payload.image_tag }}
 
     secrets:   
       aws_ecs_role_arn: ${{ secrets.AWS_ECS_ROLE_ARN }}
