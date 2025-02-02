@@ -23,7 +23,11 @@ on:
         required: true
       hosted_zone_id:
         required: true
-              
+
+concurrency:
+  group: "terraform_apply-${{ inputs.environment }}"
+  cancel-in-progress: false
+        
 env:
   AWS_REGION: us-west-2
   AWS_ECS_ROLE_ARN: ${{ secrets.AWS_ECS_ROLE_ARN }}
@@ -79,6 +83,6 @@ jobs:
         run: terraform plan -out=plan.out
 
       - name: Terraform Apply with Target
-        run: terraform apply -auto-approve -input=false plan.out
+        run: terraform apply -lock-timeout=5m -auto-approve -input=false plan.out
           
           

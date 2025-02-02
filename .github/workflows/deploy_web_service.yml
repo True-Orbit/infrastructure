@@ -11,6 +11,13 @@ jobs:
       id-token: write
       
     uses: ./.github/workflows/terraform_apply.yml
+    
     with:
       environment: ${{ github.event.client_payload.environment }}
       web_service_image_tag: ${{ github.event.client_payload.image_tag }}
+
+    secrets:   
+      aws_ecs_role_arn: ${{ secrets.AWS_ECS_ROLE_ARN }}
+      core_rds_username: ${{ secrets.TF_VAR_CORE_RDS_USERNAME }}
+      core_rds_password: ${{ secrets.TF_VAR_CORE_RDS_PASSWORD }}
+      hosted_zone_id: ${{ secrets.TF_VAR_HOSTED_ZONE_ID }}

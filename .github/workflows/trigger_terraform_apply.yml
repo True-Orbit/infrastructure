@@ -18,10 +18,12 @@ jobs:
       id-token: write
       
     uses: ./.github/workflows/terraform_apply.yml
+
     with:
       environment: ${{ inputs.environment }}
       web_service_image_tag: ${{ inputs.web_service_image_tag }}
       core_server_image_tag: ${{ inputs.core_server_image_tag }}
+      
     secrets:   
       aws_ecs_role_arn: ${{ secrets.AWS_ECS_ROLE_ARN }}
       core_rds_username: ${{ secrets.TF_VAR_CORE_RDS_USERNAME }}
