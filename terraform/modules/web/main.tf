@@ -14,6 +14,24 @@ resource "aws_security_group" "web_sg" {
   }
 }
 
+resource "aws_vpc_endpoint" "ecr_api" {
+  vpc_id            = var.vpc_id
+  service_name      = "com.amazonaws.us-west-2.ecr.api"
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = [var.subnet_id]
+
+  security_group_ids = [aws_security_group.web_sg.id]
+}
+
+resource "aws_vpc_endpoint" "ecr_dkr" {
+  vpc_id            = var.vpc_id
+  service_name      = "com.amazonaws.us-west-2.ecr.dkr"
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = [var.subnet_id]
+
+  security_group_ids = [aws_security_group.web_sg.id]
+}
+
 resource "aws_security_group_rule" "http_ingress" {
   type              = "ingress"
   description       = "Allow inbound on port ${local.port} for the web service"
@@ -24,14 +42,29 @@ resource "aws_security_group_rule" "http_ingress" {
   security_group_id = aws_security_group.web_sg.id
 }
 
+resource "aws_security_group_rule" "https_ingress" {
+  type              = "ingress"
+  description       = "Allow inbound https on port 443 for the web service"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.web_sg.id
+}
+
 resource "aws_security_group_rule" "http_egress" {
   type              = "egress"
   description       = "Allow outbound on port ${local.port} for the web service"
   from_port         = 0
   to_port           = 0
-  protocol          = "tcp"
+  protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.web_sg.id
+}
+
+resource "aws_cloudwatch_log_group" "web_service_log_group" {
+  name              = "/ecs/web-service"
+  retention_in_days = 30
 }
 
 resource "aws_ecs_task_definition" "web_task" {
@@ -51,12 +84,20 @@ resource "aws_ecs_task_definition" "web_task" {
           containerPort = local.port
         }
       ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options   = {
+          "awslogs-group"         = aws_cloudwatch_log_group.web_service_log_group.name
+          "awslogs-region"        = "us-west-2"
+          "awslogs-stream-prefix" = "ecs"
+        }
+      }
     }
   ])
 }
 
 resource "aws_lb_target_group" "web_target_group" {
-  name        = "service-target"
+  name        = "web-service-target"
   port        = local.port
   protocol    = "HTTP"
   vpc_id      = var.vpc_id

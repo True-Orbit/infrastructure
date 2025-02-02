@@ -4,7 +4,7 @@ resource "aws_security_group" "alb_sg" {
   vpc_id      = var.vpc_id
 
   tags = {
-    name = "core-alb-sg"
+    Name = "core-alb-sg"
     env  = var.environment
     app  = "true-orbit"
   }
@@ -30,7 +30,7 @@ resource "aws_lb" "main" {
   enable_deletion_protection = false
 
   tags = {
-    name = "true-orbit-alb"
+    Name = "true-orbit-alb"
     env  = var.environment
     app  = "true-orbit"
   }

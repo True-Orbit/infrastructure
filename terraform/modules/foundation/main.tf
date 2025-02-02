@@ -1,7 +1,7 @@
 resource "aws_vpc" "this" {
   cidr_block = var.vpc_cidr_block
   tags = {
-    name = "vpc"
+    Name = "true-orbit-vpc"
     app  = "true-orbit"
     env  = var.environment
   }
@@ -21,7 +21,7 @@ resource "aws_subnet" "public_a" {
   availability_zone       = var.aws_az
   map_public_ip_on_launch = true
   tags = {
-    name  = "public-subnet"
+    Name  = "public-subnet-a"
     az    = var.aws_az
     app   = "true-orbit"
     env   = var.environment
@@ -34,7 +34,7 @@ resource "aws_subnet" "public_b" {
   availability_zone       = var.aws_az2
   map_public_ip_on_launch = true
   tags = {
-    name  = "public-subnet"
+    Name  = "public-subnet-b"
     az    = var.aws_az2
     app   = "true-orbit"
     env   = var.environment
@@ -49,7 +49,7 @@ resource "aws_subnet" "private_a" {
   map_public_ip_on_launch = false
 
   tags = {
-    name        = "true-orbit-private-subnet"
+    Name        = "private-subnet-a"
     app         = "true-orbit"
     az          = var.aws_az
     environment = var.environment
@@ -63,7 +63,7 @@ resource "aws_subnet" "private_b" {
   map_public_ip_on_launch = false
 
   tags = {
-    name        = "true-orbit-private-subnet"
+    Name        = "private-subnet-b"
     app         = "true-orbit"
     az          = var.aws_az2
     environment = var.environment
@@ -72,8 +72,9 @@ resource "aws_subnet" "private_b" {
 
 resource "aws_ecs_cluster" "this" {
   name = "true-orbit-${var.environment}-ecs-cluster"
+  
   tags = {
-    name        = "ecs-cluster"
+    Name        = "ecs-cluster"
     app         = "true-orbit"
     environment = var.environment
   }

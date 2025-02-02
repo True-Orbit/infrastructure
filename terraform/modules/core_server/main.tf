@@ -8,10 +8,28 @@ resource "aws_security_group" "core_server_sg" {
   vpc_id      = var.vpc_id
 
   tags = {
-    name = "core-server-sg"
+    Name = "core-server-sg"
     env  = var.environment
     app  = "true-orbit"
   }
+}
+
+resource "aws_vpc_endpoint" "ecr_api" {
+  vpc_id            = var.vpc_id
+  service_name      = "com.amazonaws.us-west-2.ecr.api"
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = [var.subnet_id]
+
+  security_group_ids = [aws_security_group.core_server_sg.id]
+}
+
+resource "aws_vpc_endpoint" "ecr_dkr" {
+  vpc_id            = var.vpc_id
+  service_name      = "com.amazonaws.us-west-2.ecr.dkr"
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = [var.subnet_id]
+
+  security_group_ids = [aws_security_group.core_server_sg.id]
 }
 
 resource "aws_security_group_rule" "http_ingress" {
@@ -24,14 +42,29 @@ resource "aws_security_group_rule" "http_ingress" {
   security_group_id = aws_security_group.core_server_sg.id
 }
 
+resource "aws_security_group_rule" "https_ingress" {
+  type              = "ingress"
+  description       = "Allow inbound https traffic on port 433 for core server"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.core_server_sg.id
+}
+
 resource "aws_security_group_rule" "http_egress" {
   type              = "egress"
   description       = "Allow outbount on any port"
   from_port         = 0
   to_port           = 0
-  protocol          = "tcp"
+  protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.core_server_sg.id
+}
+
+resource "aws_cloudwatch_log_group" "core_server_log_group" {
+  name              = "/ecs/core-server"
+  retention_in_days = 30
 }
 
 resource "aws_ecs_task_definition" "core_server_task" {
@@ -51,12 +84,20 @@ resource "aws_ecs_task_definition" "core_server_task" {
           containerPort = local.port
         }
       ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options   = {
+          "awslogs-group"         = aws_cloudwatch_log_group.core_server_log_group.name
+          "awslogs-region"        = "us-west-2"
+          "awslogs-stream-prefix" = "ecs"
+        }
+      }
     }
   ])
 }
 
 resource "aws_lb_target_group" "core_server_target_group" {
-  name        = "service-target"
+  name        = "core-server-target-group"
   port        = local.port
   protocol    = "HTTP"
   vpc_id      = var.vpc_id

@@ -9,7 +9,7 @@ resource "aws_db_subnet_group" "this" {
   subnet_ids = var.subnet_ids
 
   tags = {
-    name = "core-rds-subnet-group"
+    Name = "core-rds-subnet-group"
     app  = "true-orbit"
     env  = var.environment
   }
@@ -21,7 +21,7 @@ resource "aws_security_group" "core_rds_sg" {
   vpc_id      = var.vpc_id
 
   tags = {
-    name = "core-rds-sg"
+    Name = "core-rds-sg"
     env  = var.environment
     app  = "true-orbit"
   }
@@ -58,6 +58,6 @@ resource "aws_db_instance" "core-rds" {
   tags = {
     env = var.environment
     app = "true-orbit"
-    name = "core-rds-instance"
+    Name = "core-rds-instance"
   }
 }
