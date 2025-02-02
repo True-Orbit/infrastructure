@@ -1,0 +1,17 @@
+name: Change image tag and deploy web service
+
+on:
+  repository_dispatch:
+    types: [deploy_web_service]
+
+jobs:
+  deploy_web_service:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/workflows/terraform_apply
+        with:
+          environment: ${{ github.event.client_payload.environment }}
+          web_service_image_tag: ${{ github.event.client_payload.image_tag }}
