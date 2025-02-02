@@ -30,7 +30,7 @@ jobs:
     environment: ${{ inputs.environment }}
 
     env:
-      ECS_REGION: us-west-2
+      AWS_REGION: us-west-2
       AWS_ECS_ROLE_ARN: ${{ secrets.AWS_ECS_ROLE_ARN }}
       ENVIRONMENT: ${{ inputs.environment }}
       TF_VAR_core_rds_username: ${{ secrets.TF_VAR_CORE_RDS_USERNAME }}
