@@ -20,16 +20,6 @@ resource "aws_security_group_rule" "alb_sg_ingress" {
   security_group_id = aws_security_group.alb_sg.id
 }
 
-resource "aws_security_group_rule" "alb_sg_egress" {
-  type              = "egress"
-  description       = "Allow outbound traffic from the app"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.alb_sg.id
-}
-
 resource "aws_lb" "main" {
   name               = "true-orbit-${var.environment}-alb"
   internal           = false
@@ -46,7 +36,7 @@ resource "aws_lb" "main" {
   }
 }
 
-resource "aws_route53_record" "example" {
+resource "aws_route53_record" "true_orbit_alb" {
   zone_id = var.dns_zone_id
   name    = var.dns_name
   type    = "A"
