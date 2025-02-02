@@ -6,12 +6,7 @@ on:
 
 jobs:
   deploy_web_service:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: ./.github/workflows/terraform_apply.yml
-        with:
-          environment: ${{ github.event.client_payload.environment }}
-          web_service_image_tag: ${{ github.event.client_payload.image_tag }}
+    uses: ./.github/workflows/terraform_apply.yml
+    with:
+      environment: ${{ github.event.client_payload.environment }}
+      web_service_image_tag: ${{ github.event.client_payload.image_tag }}
