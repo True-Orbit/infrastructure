@@ -12,7 +12,7 @@ on:
         required: false
 
 jobs:
-  deploy_web_service:
+  trigger_terraform_apply:
     permissions:
       contents: read
       id-token: write
