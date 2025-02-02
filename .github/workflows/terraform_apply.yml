@@ -2,7 +2,7 @@ name: Trigger Terraform Apply on Web's ECS Cluster
 
 on:
   repository_dispatch:
-    types: [redeploy_web_service]
+    types: [terraform_apply]
 
   workflow_dispatch:
     inputs:
