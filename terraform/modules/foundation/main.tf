@@ -20,8 +20,9 @@ resource "aws_subnet" "public_a" {
   cidr_block              = var.public_subnet_cidr_block1
   availability_zone       = var.aws_az
   map_public_ip_on_launch = true
+  
   tags = {
-    Name  = "public-subnet-a"
+    Name  = "true-orbit-public-subnet-a"
     az    = var.aws_az
     app   = "true-orbit"
     env   = var.environment
@@ -33,8 +34,9 @@ resource "aws_subnet" "public_b" {
   cidr_block              = var.public_subnet_cidr_block2
   availability_zone       = var.aws_az2
   map_public_ip_on_launch = true
+
   tags = {
-    Name  = "public-subnet-b"
+    Name  = "true-orbit-public-subnet-b"
     az    = var.aws_az2
     app   = "true-orbit"
     env   = var.environment
@@ -45,11 +47,12 @@ resource "aws_subnet" "public_b" {
 resource "aws_subnet" "private_a" {
   vpc_id                  = aws_vpc.this.id
   cidr_block              = var.private_subnet_cidr_block1
-  availability_zone       = var.aws_az  
-  map_public_ip_on_launch = false
+  availability_zone       = var.aws_az
+  # map_public_ip_on_launch = false
+  map_public_ip_on_launch = true
 
   tags = {
-    Name        = "private-subnet-a"
+    Name        = "true-orbit-private-subnet-a"
     app         = "true-orbit"
     az          = var.aws_az
     environment = var.environment
@@ -59,11 +62,12 @@ resource "aws_subnet" "private_a" {
 resource "aws_subnet" "private_b" {
   vpc_id                  = aws_vpc.this.id
   cidr_block              = var.private_subnet_cidr_block2
-  availability_zone       = var.aws_az2 
-  map_public_ip_on_launch = false
+  availability_zone       = var.aws_az2
+  # map_public_ip_on_launch = false
+  map_public_ip_on_launch = true
 
   tags = {
-    Name        = "private-subnet-b"
+    Name        = "true-orbit-private-subnet-b"
     app         = "true-orbit"
     az          = var.aws_az2
     environment = var.environment

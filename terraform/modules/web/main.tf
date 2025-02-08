@@ -74,6 +74,12 @@ resource "aws_ecs_task_definition" "web_task" {
   memory                   = "512"
   network_mode             = "awsvpc"
   execution_role_arn       = var.ecs_iam_role_arn
+  task_role_arn            = var.ecs_iam_role_arn
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "ARM64"
+  }
 
   container_definitions = jsonencode([
     {
@@ -81,6 +87,8 @@ resource "aws_ecs_task_definition" "web_task" {
       image = var.image_tag
       portMappings = [
         {
+          name          = "true-orbit-web-3000-tcp"
+          appProtocol   = "http"
           containerPort = local.port
         }
       ]
@@ -154,6 +162,7 @@ resource "aws_ecs_service" "web_service" {
   network_configuration {
     subnets         = [var.subnet_id]
     security_groups = [aws_security_group.web_sg.id]
+    assign_public_ip = true
   }
 
   load_balancer {
