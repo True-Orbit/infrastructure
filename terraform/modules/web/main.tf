@@ -74,6 +74,7 @@ resource "aws_ecs_task_definition" "web_task" {
   memory                   = "512"
   network_mode             = "awsvpc"
   execution_role_arn       = var.ecs_iam_role_arn
+  task_role_arn            = var.ecs_iam_role_arn
 
   runtime_platform {
     operating_system_family = "LINUX"
@@ -86,6 +87,8 @@ resource "aws_ecs_task_definition" "web_task" {
       image = var.image_tag
       portMappings = [
         {
+          name          = "true-orbit-web-3000-tcp"
+          appProtocol   = "http"
           containerPort = local.port
         }
       ]
