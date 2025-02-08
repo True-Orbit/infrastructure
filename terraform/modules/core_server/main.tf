@@ -155,5 +155,6 @@ resource "aws_ecs_service" "core_server_service" {
   network_configuration {
     subnets         = [var.subnet_id]
     security_groups = [aws_security_group.core_server_sg.id]
+    assign_public_ip = true
   }
 }
