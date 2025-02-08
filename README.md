@@ -21,3 +21,9 @@
   - add `local.trueorbit.me` to your /etc/hosts file
 
   - restart Nginx
+
+### Terraform Plan / Apply
+  - Secrets
+    - direnv is helpful
+    - Make sure you have rds, hostedZone in your env variables
+    - run `source ./script/set_image_tag_envs.sh` to make sure your image variables are up to date
