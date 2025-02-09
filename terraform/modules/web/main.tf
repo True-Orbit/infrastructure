@@ -87,6 +87,42 @@ resource "aws_ecs_task_definition" "web_task" {
           containerPort = local.port
         }
       ]
+
+      healthCheck = {
+        command     = ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
+        interval    = 30 
+        timeout     = 5  
+        retries     = 3  
+        startPeriod = 60  
+      }
+
+      secrets = [
+        {
+          name      = "OAUTH_GITHUB_ID"
+          valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
+        },
+        {
+          name      = "OAUTH_GITHUB_SECRET"
+          valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
+        },
+        {
+          name      = "OAUTH_GOOGLE_CLIENT_ID"
+          valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
+        },
+        {
+          name      = "OAUTH_GOOGLE_CLIENT_SECRET"
+          valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
+        },
+        {
+          name      = "NEXTAUTH_SECRET"
+          valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
+        },
+        {
+          name      = "NEXTAUTH_URL"
+          valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
+        },
+      ]
+
       logConfiguration = {
         logDriver = "awslogs"
         options   = {
