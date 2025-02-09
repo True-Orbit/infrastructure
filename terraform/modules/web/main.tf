@@ -157,13 +157,8 @@ resource "aws_lb_listener" "web_service" {
   protocol          = "HTTP"
 
   default_action {
-    type = "fixed-response"
-    
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "Not Found"
-      status_code  = "404"
-    }
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.web_target_group.arn
   }
 }
 
