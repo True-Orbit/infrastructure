@@ -76,11 +76,6 @@ resource "aws_ecs_task_definition" "web_task" {
   execution_role_arn       = var.ecs_iam_role_arn
   task_role_arn            = var.ecs_iam_role_arn
 
-  runtime_platform {
-    operating_system_family = "LINUX"
-    cpu_architecture        = "ARM64"
-  }
-
   container_definitions = jsonencode([
     {
       name  = "web-container"

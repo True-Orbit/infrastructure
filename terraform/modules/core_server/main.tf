@@ -54,7 +54,7 @@ resource "aws_security_group_rule" "https_ingress" {
 
 resource "aws_security_group_rule" "http_egress" {
   type              = "egress"
-  description       = "Allow outbount on any port"
+  description       = "Allow outbound on any port"
   from_port         = 0
   to_port           = 0
   protocol          = "-1"
