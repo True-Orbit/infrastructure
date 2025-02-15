@@ -144,10 +144,11 @@ resource "aws_lb_target_group" "web_target_group" {
 
   health_check {
     path                = "/api/health"
-    interval            = 30
+    interval            = 60
     timeout             = 5
     healthy_threshold   = 3
     unhealthy_threshold = 2
+    matcher             = "200-299"
   }
 }
 
