@@ -40,6 +40,10 @@ module "iam" {
   source = "./modules/iam"
 }
 
+module "s3" {
+  source = "./modules/s3"
+}
+
 module "domain" {
   source = "./modules/route53"
 }
@@ -58,6 +62,9 @@ module "alb" {
   ecs_cluster_id = module.foundation.ecs_cluster_id
   dns_name = module.domain.dns_name
   dns_zone_id = module.domain.dns_zone_id
+  logs_bucket = module.s3.alb_logs_bucket
+
+  depends_on = [module.s3]
 }
 
 module "ecr_core_server" {

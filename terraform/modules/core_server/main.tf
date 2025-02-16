@@ -117,16 +117,6 @@ resource "aws_lb_listener" "core_server" {
   port              = 80
   protocol          = "HTTP"
 
-  # default_action {
-  #   type = "fixed-response"
-    
-  #   fixed_response {
-  #     content_type = "text/plain"
-  #     message_body = "Not Found"
-  #     status_code  = "404"
-  #   }
-  # }
-
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.core_server_target_group.arn

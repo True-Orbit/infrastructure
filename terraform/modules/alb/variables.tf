@@ -26,3 +26,8 @@ variable "dns_zone_id" {
   description = "dns zone id"
   type = string
 }
+
+variable "logs_bucket" {
+  description = "logs bucket"
+  type = string
+}
