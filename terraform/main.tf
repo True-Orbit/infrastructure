@@ -67,6 +67,11 @@ module "alb" {
   depends_on = [module.s3]
 }
 
+module "athena" {
+  source = "./modules/athena"
+  location = "s3://${module.s3.alb_logs_bucket}/alb-logs/"
+}
+
 module "alb_waf" {
   source = "./modules/waf"
   alb_arn = module.alb.alb_arn
