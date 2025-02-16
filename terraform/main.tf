@@ -67,6 +67,11 @@ module "alb" {
   depends_on = [module.s3]
 }
 
+module "alb_waf" {
+  source = "./modules/waf"
+  alb_arn = module.alb.alb_arn
+}
+
 module "ecr_core_server" {
   source = "./modules/ecr/core_server"
 }
