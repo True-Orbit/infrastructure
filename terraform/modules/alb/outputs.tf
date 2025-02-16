@@ -3,7 +3,7 @@ output "alb_id" {
   value = aws_lb.main.id
 }
 
-output "alb_arn" {
-  description = "alb arn"
-  value = aws_lb.main.arn
+output "web_target_group_arn" {
+  description = "The ARN of the target group for the web service"
+  value = aws_lb_target_group.web_target_group.arn
 }

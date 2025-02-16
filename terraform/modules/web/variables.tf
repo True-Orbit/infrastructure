@@ -34,12 +34,12 @@ variable "desired_count" {
   default     = 1
 }
 
-variable "alb_arn" {
-  description = "The ARN of the ALB"
+variable "ecs_iam_role_arn" {
+  description = "The ARN of the ECS task execution role"
   type        = string
 }
 
-variable "ecs_iam_role_arn" {
-  description = "The ARN of the ECS task execution role"
+variable "target_group_arn" {
+  description = "The ARN of the target group"
   type        = string
 }

@@ -96,50 +96,6 @@ resource "aws_ecs_task_definition" "core_server_task" {
   ])
 }
 
-resource "aws_lb_target_group" "core_server_target_group" {
-  name        = "core-server-target-group"
-  port        = local.port
-  protocol    = "HTTP"
-  vpc_id      = var.vpc_id
-  target_type = "ip"
-
-  health_check {
-    path                = "/api/health"
-    interval            = 30
-    timeout             = 5
-    healthy_threshold   = 3
-    unhealthy_threshold = 2
-  }
-}
-
-resource "aws_lb_listener" "core_server" {
-  load_balancer_arn = var.alb_arn
-  port              = 80
-  protocol          = "HTTP"
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.core_server_target_group.arn
-  }
-}
-
-resource "aws_lb_listener_rule" "api_rule" {
-  listener_arn = aws_lb_listener.core_server.arn
-  priority     = 20
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.core_server_target_group.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/api*", "/api/*"]
-    }
-  }
-}
-
-
 resource "aws_ecs_service" "core_server_service" {
   name            = "core-server-service"
   cluster         = var.ecs_cluster_id
