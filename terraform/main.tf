@@ -40,6 +40,10 @@ module "iam" {
   source = "./modules/iam"
 }
 
+module "s3" {
+  source = "./modules/s3"
+}
+
 module "domain" {
   source = "./modules/route53"
 }
@@ -58,6 +62,9 @@ module "alb" {
   ecs_cluster_id = module.foundation.ecs_cluster_id
   dns_name = module.domain.dns_name
   dns_zone_id = module.domain.dns_zone_id
+  logs_bucket = module.s3.alb_logs_bucket
+
+  depends_on = [module.s3]
 }
 
 module "ecr_core_server" {
@@ -86,7 +93,6 @@ module "core_server" {
   ecs_cluster_id   = module.foundation.ecs_cluster_id
   subnet_id        = module.foundation.private_subnet_a_id
   ecs_iam_role_arn = module.iam.ecs_role_arn
-  alb_arn          = module.alb.alb_arn
 }
 
 module "web_service" {
@@ -97,6 +103,6 @@ module "web_service" {
   vpc_id           = module.foundation.vpc_id
   ecs_cluster_id   = module.foundation.ecs_cluster_id
   subnet_id        = module.foundation.private_subnet_a_id
-  alb_arn          = module.alb.alb_arn
   ecs_iam_role_arn = module.iam.ecs_role_arn
+  target_group_arn = module.alb.web_target_group_arn
 }
