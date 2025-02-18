@@ -130,7 +130,7 @@ resource "aws_glue_catalog_table" "alb_logs" {
       type = "string"
     }
 
-    location = "s3://true-orbit-alb-logs-bucket/alb-logs/"
+    location = "s3://true-orbit-alb-logs-bucket/alb-logs/AWSLogs/267135861046/elasticloadbalancing/us-west-2/"
 
     input_format  = "org.apache.hadoop.mapred.TextInputFormat"
     output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"

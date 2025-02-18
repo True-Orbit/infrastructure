@@ -12,10 +12,20 @@ resource "aws_security_group" "alb_sg" {
 
 resource "aws_security_group_rule" "alb_sg_ingress" {
   type              = "ingress"
-  description       = "Allow inbound traffic to the app"
+  description       = "Allow inbound traffic to the alb"
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.alb_sg.id
+}
+
+resource "aws_security_group_rule" "alb_sg_egress" {
+  type              = "egress"
+  description       = "Allow outbound traffic from the alb"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.alb_sg.id
 }
@@ -72,16 +82,28 @@ resource "aws_lb_target_group" "web_target_group" {
 
 resource "aws_lb_listener_rule" "web_rule" {
   listener_arn = aws_lb_listener.this.arn
-  priority     = 10
+  priority     = 19
+
+  tags = {
+    Name = "web-redirect"
+  }
 
   action {
-    type             = "forward"
+    type             = "redirect"
     target_group_arn = aws_lb_target_group.web_target_group.arn
+
+    redirect {
+      protocol = "HTTP"
+      port     = "3000"
+      path     = "/#{path}"
+      query    = "#{query}"
+      status_code = "HTTP_301"
+    }
   }
 
   condition {
     path_pattern {
-      values = ["/web*", "/web/*"]
+      values = ["/web/*"]
     }
   }
 }
@@ -104,16 +126,28 @@ resource "aws_lb_target_group" "core_server_target_group" {
 
 resource "aws_lb_listener_rule" "api_rule" {
   listener_arn = aws_lb_listener.this.arn
-  priority     = 20
+  priority     = 11
+
+  tags = {
+    Name = "api-redirect"
+  }
 
   action {
-    type             = "forward"
+    type             = "redirect"
     target_group_arn = aws_lb_target_group.core_server_target_group.arn
+
+    redirect {
+      protocol = "HTTP"
+      port     = "4000"
+      path     = "/#{path}"
+      query    = "#{query}"
+      status_code = "HTTP_301"
+    }
   }
 
   condition {
     path_pattern {
-      values = ["/api*", "/api/*"]
+      values = ["/api/*"]
     }
   }
 }
