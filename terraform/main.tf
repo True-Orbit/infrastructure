@@ -106,7 +106,8 @@ module "core_server" {
 }
 
 module "web_service" {
-  source           = "./modules/web"
+  source           = "./modules/ecs_service"
+  name             = "Web Service"
   environment      = var.environment
   repository_url   = module.ecr_web.repository_url
   image_tag        = local.web_image_tag
@@ -115,4 +116,32 @@ module "web_service" {
   subnet_id        = module.foundation.private_subnet_a_id
   ecs_iam_role_arn = module.iam.ecs_role_arn
   target_group_arn = module.alb.web_target_group_arn
+  port             = 3000
+  health_check_path = "/api/web/health"
+  secrets           = [
+    {
+      name      = "OAUTH_GITHUB_ID"
+      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
+    },
+    {
+      name      = "OAUTH_GITHUB_SECRET"
+      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
+    },
+    {
+      name      = "OAUTH_GOOGLE_CLIENT_ID"
+      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
+    },
+    {
+      name      = "OAUTH_GOOGLE_CLIENT_SECRET"
+      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
+    },
+    {
+      name      = "NEXTAUTH_SECRET"
+      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
+    },
+    {
+      name      = "NEXTAUTH_URL"
+      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
+    },
+  ]
 }

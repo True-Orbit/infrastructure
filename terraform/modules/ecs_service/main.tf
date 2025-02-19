@@ -1,14 +1,14 @@
-locals { 
-  port = 3000
+locals {
+  kebab_name = trimspace(replace(lower(var.name), " ", "-"))
 }
 
 resource "aws_security_group" "web_sg" {
-  name        = "true-orbit-${var.environment}-web-sg"
-  description = "web security group for ECS tasks"
+  name        = "true-orbit-${var.environment}-${kebab_name}-sg"
+  description = "${kebab_name} security group for ECS tasks"
   vpc_id      = var.vpc_id
 
   tags = {
-    name = "web-sg"
+    name = "${kebab_name}-sg"
     env  = var.environment
     app  = "true-orbit"
   }
@@ -34,17 +34,17 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
 
 resource "aws_security_group_rule" "http_ingress" {
   type              = "ingress"
-  description       = "Allow inbound on port ${local.port} for the web service"
-  from_port         = local.port
-  to_port           = local.port
+  description       = "Allow inbound on port ${var.port} for the ${var.name}"
+  from_port         = var.port
+  to_port           = var.port
   protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = var.ingress_cidr_blocks
   security_group_id = aws_security_group.web_sg.id
 }
 
 resource "aws_security_group_rule" "http_egress" {
   type              = "egress"
-  description       = "Allow outbound on port ${local.port} for the web service"
+  description       = "Allow outbound on port ${var.port} for the ${var.name}"
   from_port         = 0
   to_port           = 0
   protocol          = "-1"
@@ -53,65 +53,40 @@ resource "aws_security_group_rule" "http_egress" {
 }
 
 resource "aws_cloudwatch_log_group" "web_service_log_group" {
-  name              = "/ecs/web-service"
+  name              = "/ecs/${kebab_name}"
   retention_in_days = 30
 }
 
 resource "aws_ecs_task_definition" "web_task" {
-  family                   = "web-task"
+  family                   = "${kebab_name}-task"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "256"
-  memory                   = "512"
+  cpu                      = var.cpu
+  memory                   = var.memory
   network_mode             = "awsvpc"
   execution_role_arn       = var.ecs_iam_role_arn
   task_role_arn            = var.ecs_iam_role_arn
 
   container_definitions = jsonencode([
     {
-      name  = "web-container"
+      name  = "${kebab_name}-container"
       image = var.image_tag
       portMappings = [
         {
-          name          = "true-orbit-web-3000-tcp"
+          name          = "true-orbit-${kebab_name}-tcp"
           appProtocol   = "http"
-          containerPort = local.port
+          containerPort = var.port
         }
       ]
 
       healthCheck = {
-        command     = ["CMD-SHELL", "curl -f http://localhost:3000/api/web/health || exit 1"]
+        command     = ["CMD-SHELL", "curl -f http://localhost:${var.port}${var.health_check_path} || exit 1"]
         interval    = 30 
         timeout     = 5  
         retries     = 3  
         startPeriod = 60  
       }
 
-      secrets = [
-        {
-          name      = "OAUTH_GITHUB_ID"
-          valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
-        },
-        {
-          name      = "OAUTH_GITHUB_SECRET"
-          valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
-        },
-        {
-          name      = "OAUTH_GOOGLE_CLIENT_ID"
-          valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
-        },
-        {
-          name      = "OAUTH_GOOGLE_CLIENT_SECRET"
-          valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
-        },
-        {
-          name      = "NEXTAUTH_SECRET"
-          valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
-        },
-        {
-          name      = "NEXTAUTH_URL"
-          valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
-        },
-      ]
+      secrets = var.secrets
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -126,7 +101,7 @@ resource "aws_ecs_task_definition" "web_task" {
 }
 
 resource "aws_ecs_service" "web_service" {
-  name            = "web-service"
+  name            = kebab_name
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.web_task.arn
   desired_count   = var.desired_count
@@ -140,7 +115,7 @@ resource "aws_ecs_service" "web_service" {
 
   load_balancer {
     target_group_arn = var.target_group_arn
-    container_name   = "web-container"
-    container_port   = local.port
+    container_name   = "${kebab_name}-container"
+    container_port   = var.port
   }
 }

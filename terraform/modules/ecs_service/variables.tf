@@ -1,3 +1,8 @@
+variable "name" {
+  description = "The name of the service"
+  type        = string
+}
+
 variable "image_tag" {
   description = "The tag for the Docker image"
   type        = string
@@ -42,4 +47,42 @@ variable "ecs_iam_role_arn" {
 variable "target_group_arn" {
   description = "The ARN of the target group"
   type        = string
+}
+
+variable "port" {
+  description = "The port the container listens on"
+  type        = number
+}
+
+variable "ingress_cidr_blocks" {
+  description = "The CIDR block to allow ingress from"
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
+variable "secrets" {
+  description = "The secrets to pass to the container"
+  type        = list(object({
+    name      = string
+    valueFrom = string
+  }))
+  default     = []
+}
+
+variable "health_check_path" {
+  description = "The path to use for the health check"
+  type        = string
+  default     = "/health"
+}
+
+variable "cpu" {
+  description = "The amount of CPU to allocate to the container"
+  type        = string
+  default     = "256"
+}
+
+variable "memory" {
+  description = "The amount of memory to allocate to the container"
+  type        = string
+  default     = "512"
 }
