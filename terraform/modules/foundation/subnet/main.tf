@@ -13,5 +13,6 @@ resource "aws_subnet" "this" {
     app         = "true-orbit"
     az          = var.aws_az
     environment = var.environment
+    sector      = local.sector
   }
 }
