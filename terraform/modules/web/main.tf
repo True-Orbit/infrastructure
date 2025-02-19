@@ -42,16 +42,6 @@ resource "aws_security_group_rule" "http_ingress" {
   security_group_id = aws_security_group.web_sg.id
 }
 
-resource "aws_security_group_rule" "https_ingress" {
-  type              = "ingress"
-  description       = "Allow inbound https on port 443 for the web service"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.web_sg.id
-}
-
 resource "aws_security_group_rule" "http_egress" {
   type              = "egress"
   description       = "Allow outbound on port ${local.port} for the web service"
