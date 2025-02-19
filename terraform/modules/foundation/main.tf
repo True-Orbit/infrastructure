@@ -43,33 +43,22 @@ resource "aws_subnet" "public_b" {
   }
 }
 
-
-resource "aws_subnet" "private_a" {
-  vpc_id                  = aws_vpc.this.id
-  cidr_block              = var.private_subnet_cidr_block1
-  availability_zone       = var.aws_az
-  map_public_ip_on_launch = false
-
-  tags = {
-    Name        = "true-orbit-private-subnet-a"
-    app         = "true-orbit"
-    az          = var.aws_az
-    environment = var.environment
-  }
+module "private_subnet_a" {
+  source = "./private_subnet"
+  name = "a"
+  cidr_block = var.private_subnet_cidr_block1
+  aws_az = var.aws_az
+  environment = var.environment
+  aws_vpc_id = aws_vpc.this.id
 }
 
-resource "aws_subnet" "private_b" {
-  vpc_id                  = aws_vpc.this.id
-  cidr_block              = var.private_subnet_cidr_block2
-  availability_zone       = var.aws_az2
-  map_public_ip_on_launch = false
-
-  tags = {
-    Name        = "true-orbit-private-subnet-b"
-    app         = "true-orbit"
-    az          = var.aws_az2
-    environment = var.environment
-  }
+module "private_subnet_b" {
+  source = "./private_subnet"
+  name = "b"
+  cidr_block = var.private_subnet_cidr_block1
+  aws_az = var.aws_az
+  environment = var.environment
+  aws_vpc_id = aws_vpc.this.id
 }
 
 resource "aws_ecs_cluster" "this" {
