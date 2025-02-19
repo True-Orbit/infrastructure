@@ -106,7 +106,6 @@ module "core_server" {
   ecs_iam_role_arn = module.iam.ecs_role_arn
   target_group_arn = module.alb.core_server_target_group_arn
   port             = 4000
-  health_check_path = "/api/health"
 }
 
 module "web_service" {
