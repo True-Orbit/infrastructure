@@ -2,7 +2,7 @@ locals {
   kebab_name = trimspace(replace(lower(var.name), " ", "-"))
 }
 
-resource "aws_security_group" "web_sg" {
+resource "aws_security_group" "this" {
   name        = "true-orbit-${var.environment}-${local.kebab_name}-sg"
   description = "${local.kebab_name} security group for ECS tasks"
   vpc_id      = var.vpc_id
@@ -20,7 +20,7 @@ resource "aws_vpc_endpoint" "ecr_api" {
   vpc_endpoint_type = "Interface"
   subnet_ids        = [var.subnet_id]
 
-  security_group_ids = [aws_security_group.web_sg.id]
+  security_group_ids = [aws_security_group.this.id]
 }
 
 resource "aws_vpc_endpoint" "ecr_dkr" {
@@ -29,7 +29,7 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
   vpc_endpoint_type = "Interface"
   subnet_ids        = [var.subnet_id]
 
-  security_group_ids = [aws_security_group.web_sg.id]
+  security_group_ids = [aws_security_group.this.id]
 }
 
 resource "aws_security_group_rule" "http_ingress" {
@@ -39,7 +39,7 @@ resource "aws_security_group_rule" "http_ingress" {
   to_port           = var.port
   protocol          = "tcp"
   cidr_blocks       = var.ingress_cidr_blocks
-  security_group_id = aws_security_group.web_sg.id
+  security_group_id = aws_security_group.this.id
 }
 
 resource "aws_security_group_rule" "http_egress" {
@@ -49,15 +49,15 @@ resource "aws_security_group_rule" "http_egress" {
   to_port           = 0
   protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.web_sg.id
+  security_group_id = aws_security_group.this.id
 }
 
-resource "aws_cloudwatch_log_group" "web_service_log_group" {
+resource "aws_cloudwatch_log_group" "this" {
   name              = "/ecs/${local.kebab_name}"
   retention_in_days = 30
 }
 
-resource "aws_ecs_task_definition" "web_task" {
+resource "aws_ecs_task_definition" "this" {
   family                   = "${local.kebab_name}-task"
   requires_compatibilities = ["FARGATE"]
   cpu                      = var.cpu
@@ -91,7 +91,7 @@ resource "aws_ecs_task_definition" "web_task" {
       logConfiguration = {
         logDriver = "awslogs"
         options   = {
-          "awslogs-group"         = aws_cloudwatch_log_group.web_service_log_group.name
+          "awslogs-group"         = aws_cloudwatch_log_group.this.name
           "awslogs-region"        = "us-west-2"
           "awslogs-stream-prefix" = "ecs"
         }
@@ -100,16 +100,16 @@ resource "aws_ecs_task_definition" "web_task" {
   ])
 }
 
-resource "aws_ecs_service" "web_service" {
+resource "aws_ecs_service" "this" {
   name            = local.kebab_name
   cluster         = var.ecs_cluster_id
-  task_definition = aws_ecs_task_definition.web_task.arn
+  task_definition = aws_ecs_task_definition.this.arn
   desired_count   = var.desired_count
   launch_type     = "FARGATE" 
 
   network_configuration {
     subnets         = [var.subnet_id]
-    security_groups = [aws_security_group.web_sg.id]
+    security_groups = [aws_security_group.this.id]
   }
 
   load_balancer {
