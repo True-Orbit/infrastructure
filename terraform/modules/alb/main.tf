@@ -85,7 +85,7 @@ resource "aws_lb_listener_rule" "web_rule" {
   priority     = 10
 
   tags = {
-    Name = "web-redirect"
+    Name = "web-service-redirect"
   }
 
   action {
@@ -121,20 +121,12 @@ resource "aws_lb_listener_rule" "api_rule" {
   priority     = 20
 
   tags = {
-    Name = "api-redirect"
+    Name = "core-server-redirect"
   }
 
   action {
-    type             = "redirect"
+    type             = "forward"
     target_group_arn = aws_lb_target_group.core_server_target_group.arn
-
-    redirect {
-      protocol = "HTTP"
-      port     = "4000"
-      path     = "/#{path}"
-      query    = "#{query}"
-      status_code = "HTTP_301"
-    }
   }
 
   condition {
