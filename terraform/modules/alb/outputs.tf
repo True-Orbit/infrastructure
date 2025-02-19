@@ -12,3 +12,8 @@ output "web_target_group_arn" {
   description = "The ARN of the target group for the web service"
   value = aws_lb_target_group.web_target_group.arn
 }
+
+output "core_server_target_group_arn" {
+  description = "The ARN of the target group for the core server"
+  value = aws_lb_target_group.core_server_target_group.arn
+}

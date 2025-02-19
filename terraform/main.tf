@@ -95,7 +95,8 @@ module "core_rds" {
 }
 
 module "core_server" {
-  source           = "./modules/core_server"
+  source           = "./modules/ecs_service"
+  name             = "Core Server"
   environment      = var.environment
   repository_url   = module.ecr_core_server.repository_url
   image_tag        = local.core_server_image_tag
@@ -103,6 +104,9 @@ module "core_server" {
   ecs_cluster_id   = module.foundation.ecs_cluster_id
   subnet_id        = module.foundation.private_subnet_a_id
   ecs_iam_role_arn = module.iam.ecs_role_arn
+  target_group_arn = module.alb.core_server_target_group_arn
+  port             = 4000
+  health_check_path = "/api/health"
 }
 
 module "web_service" {

@@ -3,12 +3,12 @@ locals {
 }
 
 resource "aws_security_group" "web_sg" {
-  name        = "true-orbit-${var.environment}-${kebab_name}-sg"
-  description = "${kebab_name} security group for ECS tasks"
+  name        = "true-orbit-${var.environment}-${local.kebab_name}-sg"
+  description = "${local.kebab_name} security group for ECS tasks"
   vpc_id      = var.vpc_id
 
   tags = {
-    name = "${kebab_name}-sg"
+    name = "${local.kebab_name}-sg"
     env  = var.environment
     app  = "true-orbit"
   }
@@ -53,12 +53,12 @@ resource "aws_security_group_rule" "http_egress" {
 }
 
 resource "aws_cloudwatch_log_group" "web_service_log_group" {
-  name              = "/ecs/${kebab_name}"
+  name              = "/ecs/${local.kebab_name}"
   retention_in_days = 30
 }
 
 resource "aws_ecs_task_definition" "web_task" {
-  family                   = "${kebab_name}-task"
+  family                   = "${local.kebab_name}-task"
   requires_compatibilities = ["FARGATE"]
   cpu                      = var.cpu
   memory                   = var.memory
@@ -68,11 +68,11 @@ resource "aws_ecs_task_definition" "web_task" {
 
   container_definitions = jsonencode([
     {
-      name  = "${kebab_name}-container"
+      name  = "${local.kebab_name}-container"
       image = var.image_tag
       portMappings = [
         {
-          name          = "true-orbit-${kebab_name}-tcp"
+          name          = "true-orbit-${local.kebab_name}-tcp"
           appProtocol   = "http"
           containerPort = var.port
         }
@@ -101,7 +101,7 @@ resource "aws_ecs_task_definition" "web_task" {
 }
 
 resource "aws_ecs_service" "web_service" {
-  name            = kebab_name
+  name            = local.kebab_name
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.web_task.arn
   desired_count   = var.desired_count
@@ -115,7 +115,7 @@ resource "aws_ecs_service" "web_service" {
 
   load_balancer {
     target_group_arn = var.target_group_arn
-    container_name   = "${kebab_name}-container"
+    container_name   = "${local.kebab_name}-container"
     container_port   = var.port
   }
 }
