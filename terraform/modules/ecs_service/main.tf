@@ -80,9 +80,9 @@ resource "aws_ecs_task_definition" "this" {
 
       healthCheck = {
         command     = ["CMD-SHELL", "curl -f http://localhost:${var.port}${var.health_check_path} || exit 1"]
-        interval    = 30 
-        timeout     = 5 
-        retries     = 3 
+        interval    = 30
+        timeout     = 5
+        retries     = 3
         startPeriod = 60
       }
 
@@ -90,7 +90,7 @@ resource "aws_ecs_task_definition" "this" {
 
       logConfiguration = {
         logDriver = "awslogs"
-        options   = {
+        options = {
           "awslogs-group"         = aws_cloudwatch_log_group.this.name
           "awslogs-region"        = "us-west-2"
           "awslogs-stream-prefix" = "ecs"
@@ -105,7 +105,7 @@ resource "aws_ecs_service" "this" {
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.this.arn
   desired_count   = var.desired_count
-  launch_type     = "FARGATE" 
+  launch_type     = "FARGATE"
 
   network_configuration {
     subnets         = [var.subnet_id]

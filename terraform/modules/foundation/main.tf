@@ -20,12 +20,12 @@ resource "aws_subnet" "public_a" {
   cidr_block              = var.public_subnet_cidr_block1
   availability_zone       = var.aws_az
   map_public_ip_on_launch = true
-  
+
   tags = {
-    Name  = "true-orbit-public-subnet-a"
-    az    = var.aws_az
-    app   = "true-orbit"
-    env   = var.environment
+    Name = "true-orbit-public-subnet-a"
+    az   = var.aws_az
+    app  = "true-orbit"
+    env  = var.environment
   }
 }
 
@@ -36,10 +36,10 @@ resource "aws_subnet" "public_b" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name  = "true-orbit-public-subnet-b"
-    az    = var.aws_az2
-    app   = "true-orbit"
-    env   = var.environment
+    Name = "true-orbit-public-subnet-b"
+    az   = var.aws_az2
+    app  = "true-orbit"
+    env  = var.environment
   }
 }
 
@@ -74,7 +74,7 @@ resource "aws_subnet" "private_b" {
 
 resource "aws_ecs_cluster" "this" {
   name = "true-orbit-${var.environment}-ecs-cluster"
-  
+
   tags = {
     Name        = "ecs-cluster"
     app         = "true-orbit"

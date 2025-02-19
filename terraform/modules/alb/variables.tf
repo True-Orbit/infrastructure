@@ -4,30 +4,30 @@ variable "environment" {
 
 variable "vpc_id" {
   description = "vpc id"
-  type = string
+  type        = string
 }
 
 variable "subnet_ids" {
   description = "subnet ids"
-  type = list(string)
+  type        = list(string)
 }
 
 variable "ecs_cluster_id" {
   description = "ecs cluster id"
-  type = string
+  type        = string
 }
 
 variable "dns_name" {
   description = "dns name"
-  type = string
+  type        = string
 }
 
 variable "dns_zone_id" {
   description = "dns zone id"
-  type = string
+  type        = string
 }
 
 variable "logs_bucket" {
   description = "logs bucket"
-  type = string
+  type        = string
 }

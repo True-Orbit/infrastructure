@@ -13,7 +13,7 @@ resource "aws_s3_bucket_policy" "alb_logs_policy" {
         Effect    = "Allow",
         Principal = "*",
         Action    = "s3:*",
-        Resource  = [
+        Resource = [
           "${aws_s3_bucket.alb_logs.arn}",
           "${aws_s3_bucket.alb_logs.arn}/*"
         ]

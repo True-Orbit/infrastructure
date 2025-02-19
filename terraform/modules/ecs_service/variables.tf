@@ -62,11 +62,11 @@ variable "ingress_cidr_blocks" {
 
 variable "secrets" {
   description = "The secrets to pass to the container"
-  type        = list(object({
+  type = list(object({
     name      = string
     valueFrom = string
   }))
-  default     = []
+  default = []
 }
 
 variable "health_check_path" {

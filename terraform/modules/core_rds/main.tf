@@ -1,7 +1,7 @@
 locals {
-  db_name = "${var.environment}${var.db_name}"
+  db_name        = "${var.environment}${var.db_name}"
   rds_identifier = "${var.environment}-${var.rds_identifier}"
-  port = 5432
+  port           = 5432
 }
 
 resource "aws_db_subnet_group" "this" {
@@ -38,26 +38,26 @@ resource "aws_security_group_rule" "core_rds_sg_ingress" {
 }
 
 resource "aws_db_instance" "core-rds" {
-  identifier              = local.rds_identifier
-  engine                  = "postgres"
-  engine_version          = "17.2"
-  instance_class          = var.instance_class
-  allocated_storage       = var.allocated_storage
-  storage_type            = "gp2"
-  db_subnet_group_name    = aws_db_subnet_group.this.name
-  vpc_security_group_ids  = [aws_security_group.core_rds_sg.id]
-  publicly_accessible     = false
-  multi_az                = var.multi_az
-  storage_encrypted       = var.storage_encrypted
-  username                = "${var.environment}${var.core_rds_username}"
-  password                = var.core_rds_password
-  db_name                 = local.db_name
-  port                    = var.port
-  skip_final_snapshot     = var.environment == "production"
+  identifier             = local.rds_identifier
+  engine                 = "postgres"
+  engine_version         = "17.2"
+  instance_class         = var.instance_class
+  allocated_storage      = var.allocated_storage
+  storage_type           = "gp2"
+  db_subnet_group_name   = aws_db_subnet_group.this.name
+  vpc_security_group_ids = [aws_security_group.core_rds_sg.id]
+  publicly_accessible    = false
+  multi_az               = var.multi_az
+  storage_encrypted      = var.storage_encrypted
+  username               = "${var.environment}${var.core_rds_username}"
+  password               = var.core_rds_password
+  db_name                = local.db_name
+  port                   = var.port
+  skip_final_snapshot    = var.environment == "production"
 
   tags = {
-    env = var.environment
-    app = "true-orbit"
+    env  = var.environment
+    app  = "true-orbit"
     Name = "core-rds-instance"
   }
 }
