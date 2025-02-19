@@ -48,8 +48,7 @@ resource "aws_subnet" "private_a" {
   vpc_id                  = aws_vpc.this.id
   cidr_block              = var.private_subnet_cidr_block1
   availability_zone       = var.aws_az
-  # map_public_ip_on_launch = false
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false
 
   tags = {
     Name        = "true-orbit-private-subnet-a"
@@ -63,8 +62,7 @@ resource "aws_subnet" "private_b" {
   vpc_id                  = aws_vpc.this.id
   cidr_block              = var.private_subnet_cidr_block2
   availability_zone       = var.aws_az2
-  # map_public_ip_on_launch = false
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false
 
   tags = {
     Name        = "true-orbit-private-subnet-b"
