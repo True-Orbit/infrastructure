@@ -71,7 +71,7 @@ resource "aws_lb_target_group" "web_target_group" {
   target_type = "ip"
 
   health_check {
-    path                = "/api/health"
+    path                = "/api/web/health"
     interval            = 60
     timeout             = 5
     healthy_threshold   = 3
@@ -82,28 +82,20 @@ resource "aws_lb_target_group" "web_target_group" {
 
 resource "aws_lb_listener_rule" "web_rule" {
   listener_arn = aws_lb_listener.this.arn
-  priority     = 19
+  priority     = 10
 
   tags = {
     Name = "web-redirect"
   }
 
   action {
-    type             = "redirect"
+    type             = "forward"
     target_group_arn = aws_lb_target_group.web_target_group.arn
-
-    redirect {
-      protocol = "HTTP"
-      port     = "3000"
-      path     = "/#{path}"
-      query    = "#{query}"
-      status_code = "HTTP_301"
-    }
   }
 
   condition {
     path_pattern {
-      values = ["/web/*"]
+      values = ["/api/web/*"]
     }
   }
 }
@@ -126,7 +118,7 @@ resource "aws_lb_target_group" "core_server_target_group" {
 
 resource "aws_lb_listener_rule" "api_rule" {
   listener_arn = aws_lb_listener.this.arn
-  priority     = 11
+  priority     = 20
 
   tags = {
     Name = "api-redirect"
