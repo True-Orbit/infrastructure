@@ -78,7 +78,7 @@ module "route_table_b" {
 module "private_subnet_b" {
   source = "./subnet"
   name = "b"
-  cidr_block = var.private_subnet_cidr_block1
+  cidr_block = var.private_subnet_cidr_block2
   aws_az = var.aws_az2
   environment = var.environment
   aws_vpc_id = aws_vpc.this.id
