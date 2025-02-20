@@ -1,10 +1,10 @@
 variable "name" {
-  type = string
+  type        = string
   description = "name"
 }
 
 variable "cidr_block" {
-  type = string
+  type        = string
   description = "cidr block"
 }
 
@@ -14,16 +14,16 @@ variable "aws_az" {
 }
 
 variable "environment" {
-  type = string
+  type        = string
   description = "app environment"
 }
 
 variable "aws_vpc_id" {
-  type = string
+  type        = string
   description = "VPC ID"
 }
 
 variable "public" {
-  type = bool
+  type        = bool
   description = "public"
 }

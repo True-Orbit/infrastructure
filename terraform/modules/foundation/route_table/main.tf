@@ -1,9 +1,9 @@
 locals {
-  subnet_name        = var.subnet_tags["Name"]
-  sector             = var.subnet_tags["sector"]
-  environment        = var.subnet_tags["environment"]
-  app                = var.subnet_tags["app"]
-  az                 = var.subnet_tags["az"]
+  subnet_name = var.subnet_tags["Name"]
+  sector      = var.subnet_tags["sector"]
+  environment = var.subnet_tags["environment"]
+  app         = var.subnet_tags["app"]
+  az          = var.subnet_tags["az"]
 }
 
 resource "aws_route_table" "this" {
@@ -15,11 +15,11 @@ resource "aws_route_table" "this" {
   }
 
   tags = {
-    Name = "private-route-table-${local.subnet_name}"
-    sector = local.sector
+    Name        = "private-route-table-${local.subnet_name}"
+    sector      = local.sector
     environment = local.environment
-    app = local.app
-    az = local.az
+    app         = local.app
+    az          = local.az
   }
 }
 
