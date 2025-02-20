@@ -34,7 +34,6 @@ module "nat_gateway_a" {
 module "route_table_a" {
   source = "./route_table"
   vpc_id = aws_vpc.this.id
-  cidr_block = var.private_subnet_cidr_block1
   nat_gateway_id = module.nat_gateway_a.id
   subnet_tags = module.private_subnet_a.tags
   private_subnet_id = module.private_subnet_a.id
@@ -69,7 +68,6 @@ module "nat_gateway_b" {
 module "route_table_b" {
   source = "./route_table"
   vpc_id = aws_vpc.this.id
-  cidr_block = var.private_subnet_cidr_block2
   nat_gateway_id = module.nat_gateway_b.id
   subnet_tags = module.private_subnet_b.tags
   private_subnet_id = module.private_subnet_b.id
