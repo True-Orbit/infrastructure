@@ -13,4 +13,5 @@ runs:
         terraform_wrapper: false
 
     - name: Format Terraform
+      shell: bash
       run: terraform fmt -check -recursive
