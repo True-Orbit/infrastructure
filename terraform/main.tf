@@ -78,8 +78,6 @@ module "core_rds" {
   environment       = var.environment
   vpc_id            = module.foundation.vpc_id
   subnet_ids        = [module.foundation.private_subnet_a_id, module.foundation.private_subnet_b_id]
-  core_rds_username = var.core_rds_username
-  core_rds_password = var.core_rds_password
 }
 
 module "core_server" {

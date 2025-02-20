@@ -3,18 +3,6 @@ variable "environment" {
   type        = string
 }
 
-variable "rds_identifier" {
-  description = "The identifier for the RDS instance"
-  type        = string
-  default     = "core-rds-instance"
-}
-
-variable "db_name" {
-  description = "The name of the database"
-  type        = string
-  default     = "Core"
-}
-
 variable "instance_class" {
   description = "The instance type for the RDS instance"
   type        = string
@@ -55,25 +43,8 @@ variable "storage_encrypted" {
   default     = true
 }
 
-variable "port" {
-  description = "The port on which the database accepts connections"
-  type        = number
-  default     = 5432
-}
-
 variable "skip_final_snapshot" {
   description = "Whether to skip the final snapshot before deletion"
   type        = bool
   default     = true
-}
-
-variable "core_rds_username" {
-  description = "The database admin username"
-  type        = string
-}
-
-variable "core_rds_password" {
-  description = "The database admin password"
-  type        = string
-  sensitive   = true
 }
