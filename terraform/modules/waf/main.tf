@@ -1,7 +1,7 @@
 resource "aws_wafv2_web_acl" "generic_waf" {
   name        = "generic-waf"
   description = "Web ACL to block common attack requests and specific unwanted patterns."
-  scope       = "REGIONAL"  # Use "REGIONAL" for ALBs; for CloudFront, use "CLOUDFRONT"
+  scope       = "REGIONAL" # Use "REGIONAL" for ALBs; for CloudFront, use "CLOUDFRONT"
 
   default_action {
     allow {}
@@ -49,7 +49,7 @@ resource "aws_wafv2_web_acl" "generic_waf" {
   rule {
     name     = "BlockASPXRequests"
     priority = 3
-    
+
     action {
       block {}
     }

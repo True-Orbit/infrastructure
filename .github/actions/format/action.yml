@@ -1,0 +1,17 @@
+name: Format
+
+runs:
+  using: "composite"
+
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.10.4
+        terraform_wrapper: false
+
+    - name: Format Terraform
+      shell: bash
+      run: terraform fmt -check -recursive

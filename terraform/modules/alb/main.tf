@@ -49,12 +49,6 @@ resource "aws_lb" "main" {
 
   enable_deletion_protection = false
 
-  access_logs {
-    enabled = true
-    bucket  = var.logs_bucket
-    prefix  = "alb-logs"
-  }
-
   tags = {
     Name = "true-orbit-alb"
     env  = var.environment
