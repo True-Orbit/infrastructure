@@ -74,10 +74,10 @@ module "ecr_web" {
 }
 
 module "core_rds" {
-  source            = "./modules/core_rds"
-  environment       = var.environment
-  vpc_id            = module.foundation.vpc_id
-  subnet_ids        = [module.foundation.private_subnet_a_id, module.foundation.private_subnet_b_id]
+  source      = "./modules/core_rds"
+  environment = var.environment
+  vpc_id      = module.foundation.vpc_id
+  subnet_ids  = [module.foundation.private_subnet_a_id, module.foundation.private_subnet_b_id]
 }
 
 module "core_server" {
@@ -92,7 +92,7 @@ module "core_server" {
   ecs_iam_role_arn = module.iam.ecs_role_arn
   target_group_arn = module.alb.core_server_target_group_arn
   port             = 4000
-  secrets          = [
+  secrets = [
     {
       name      = "RDS_DEVELOPMENT_SECRETS"
       valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/core-rds/development-dIKJJI"
@@ -115,7 +115,7 @@ module "web_service" {
   health_check_path = "/api/web/health"
   secrets = [
     {
-      name = "WEB_SERVICE_SECRETS"
+      name      = "WEB_SERVICE_SECRETS"
       valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
     }
   ]

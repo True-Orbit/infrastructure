@@ -3,7 +3,7 @@ data "aws_secretsmanager_secret_version" "db_secret" {
 }
 
 locals {
-  secrets = jsondecode(data.aws_secretsmanager_secret_version.db_secret.secret_string)
+  secrets        = jsondecode(data.aws_secretsmanager_secret_version.db_secret.secret_string)
   db_name        = local.secrets.dbname
   rds_identifier = local.secrets.dbInstanceIdentifier
   port           = local.secrets.port
