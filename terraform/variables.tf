@@ -32,7 +32,16 @@ variable "core_server_secrets" {
     name      = string
     valueFrom = string
   }))
-  default = []
+  default = null
+}
+
+variable "old_core_server_secrets" {
+  description = "The secrets to pass to the container"
+  type = list(object({
+    name      = string
+    valueFrom = string
+  }))
+  default = null
 }
 
 variable "web_service_image_tag" {
@@ -51,5 +60,14 @@ variable "web_service_secrets" {
     name      = string
     valueFrom = string
   }))
-  default = []
+  default = null
+}
+
+variable "old_web_service_secrets" {
+  description = "The secrets to pass to the container"
+  type = list(object({
+    name      = string
+    valueFrom = string
+  }))
+  default = null
 }

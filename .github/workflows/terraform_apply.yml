@@ -17,12 +17,12 @@ on:
     secrets:
       aws_ecs_role_arn:
         required: true
-      core_rds_username:
-        required: true
-      core_rds_password:
-        required: true
       hosted_zone_id:
         required: true
+      web_service_secrets:
+        required: false
+      core_server_secrets:
+        required: false
 
 concurrency:
   group: "terraform_apply-${{ inputs.environment }}"
@@ -31,10 +31,9 @@ concurrency:
 env:
   AWS_REGION: us-west-2
   AWS_ECS_ROLE_ARN: ${{ secrets.AWS_ECS_ROLE_ARN }}
-  TF_VAR_core_rds_username: ${{ secrets.core_rds_username }}
-  TF_VAR_core_rds_password: ${{ secrets.core_rds_password }}
-  TF_VAR_hosted_zone_id: ${{ secrets.hosted_zone_id }}
   ENVIRONMENT: ${{ inputs.environment }}
+  
+  TF_VAR_hosted_zone_id: ${{ secrets.hosted_zone_id }}
   TF_VAR_web_service_image_tag: ${{ inputs.web_service_image_tag }}
   TF_VAR_core_server_image_tag: ${{ inputs.core_server_image_tag }}
 
@@ -75,6 +74,10 @@ jobs:
         run: |
           echo "TF_VAR_old_web_service_image_tag=$(terraform output -raw web_image_tag)" >> $GITHUB_ENV
 
+      - name: Get old web secrets
+        run: |
+          echo "TF_VAR_old_web_service_image_tag=$(terraform output -raw web_image_tag)" >> $GITHUB_ENV
+  
       - name: Get old core server image tag
         run: |
           echo "TF_VAR_old_core_server_image_tag=$(terraform output -raw core_server_image_tag)" >> $GITHUB_ENV
