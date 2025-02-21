@@ -92,7 +92,7 @@ module "core_server" {
   ecs_iam_role_arn = module.iam.ecs_role_arn
   target_group_arn = module.alb.core_server_target_group_arn
   port             = 4000
-  secrets = var.core_server_secrets
+  secrets          = var.core_server_secrets
 }
 
 module "web_service" {
@@ -108,5 +108,5 @@ module "web_service" {
   target_group_arn  = module.alb.web_target_group_arn
   port              = 3000
   health_check_path = "/api/web/health"
-  secrets = var.web_service_secrets
+  secrets           = var.web_service_secrets
 }
