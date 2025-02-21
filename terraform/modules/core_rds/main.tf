@@ -1,7 +1,14 @@
+data "aws_secretsmanager_secret_version" "db_secret" {
+  secret_id = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/core-rds/development-dIKJJI"
+}
+
 locals {
-  db_name        = "${var.environment}${var.db_name}"
-  rds_identifier = "${var.environment}-${var.rds_identifier}"
-  port           = 5432
+  secrets        = jsondecode(data.aws_secretsmanager_secret_version.db_secret.secret_string)
+  db_name        = local.secrets.dbname
+  rds_identifier = local.secrets.dbInstanceIdentifier
+  port           = local.secrets.port
+  db_user        = local.secrets.username
+  db_password    = local.secrets.password
 }
 
 resource "aws_db_subnet_group" "this" {
@@ -49,11 +56,11 @@ resource "aws_db_instance" "core-rds" {
   publicly_accessible    = false
   multi_az               = var.multi_az
   storage_encrypted      = var.storage_encrypted
-  username               = "${var.environment}${var.core_rds_username}"
-  password               = var.core_rds_password
+  username               = "${var.environment}${local.db_user}"
+  password               = local.db_password
   db_name                = local.db_name
-  port                   = var.port
-  skip_final_snapshot    = var.environment == "production"
+  port                   = local.port
+  skip_final_snapshot    = var.environment != "production"
 
   tags = {
     env  = var.environment
