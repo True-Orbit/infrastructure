@@ -92,16 +92,7 @@ module "core_server" {
   ecs_iam_role_arn = module.iam.ecs_role_arn
   target_group_arn = module.alb.core_server_target_group_arn
   port             = 4000
-  secrets = [
-    {
-      name      = "RDS_DEVELOPMENT_SECRETS"
-      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/core-rds/development-dIKJJI"
-    },
-    {
-      name      = "CORE_SERVER_SECRETS"
-      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/core-server/development-0EX2om"
-    }
-  ]
+  secrets          = var.core_server_secrets
 }
 
 module "web_service" {
@@ -117,10 +108,5 @@ module "web_service" {
   target_group_arn  = module.alb.web_target_group_arn
   port              = 3000
   health_check_path = "/api/web/health"
-  secrets = [
-    {
-      name      = "WEB_SERVICE_SECRETS"
-      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
-    }
-  ]
+  secrets           = var.web_service_secrets
 }
