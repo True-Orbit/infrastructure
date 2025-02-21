@@ -92,6 +92,12 @@ module "core_server" {
   ecs_iam_role_arn = module.iam.ecs_role_arn
   target_group_arn = module.alb.core_server_target_group_arn
   port             = 4000
+  secrets          = [
+    {
+      name      = "RDS_DEVELOPMENT_SECRETS"
+      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/core-rds/development-dIKJJI"
+    }
+  ]
 }
 
 module "web_service" {
@@ -109,28 +115,8 @@ module "web_service" {
   health_check_path = "/api/web/health"
   secrets = [
     {
-      name      = "OAUTH_GITHUB_ID"
+      name = "WEB_SERVICE_SECRETS"
       valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
-    },
-    {
-      name      = "OAUTH_GITHUB_SECRET"
-      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
-    },
-    {
-      name      = "OAUTH_GOOGLE_CLIENT_ID"
-      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
-    },
-    {
-      name      = "OAUTH_GOOGLE_CLIENT_SECRET"
-      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
-    },
-    {
-      name      = "NEXTAUTH_SECRET"
-      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
-    },
-    {
-      name      = "NEXTAUTH_URL"
-      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/web/development-3TtfMZ"
-    },
+    }
   ]
 }
