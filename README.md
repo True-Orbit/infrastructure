@@ -26,4 +26,4 @@
   - Secrets
     - direnv is helpful
     - Make sure you have rds, hostedZone in your env variables
-    - run `source ./script/set_image_tag_envs.sh` to make sure your image variables are up to date
+    - run `source ./script/set_current_state.sh` to make sure your image variables are up to date

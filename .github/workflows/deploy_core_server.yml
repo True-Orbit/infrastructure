@@ -7,7 +7,11 @@ on:
 jobs:
   deploy_web_service:
     # Don't run this job if the image tag is not provided
-    if: github.event.client_payload.image_tag != null && github.event.client_payload.image_tag != ''
+    if: >
+      github.event.client_payload.image_tag != null && 
+      github.event.client_payload.image_tag != '' && 
+      github.event.client_payload.secrets != null && 
+      github.event.client_payload.secrets != ''
 
     permissions:
       contents: read
@@ -19,8 +23,7 @@ jobs:
       environment: ${{ github.event.client_payload.environment }}
       core_server_image_tag: ${{ github.event.client_payload.image_tag }}
 
-    secrets:   
+    secrets:
       aws_ecs_role_arn: ${{ secrets.AWS_ECS_ROLE_ARN }}
-      core_rds_username: ${{ secrets.TF_VAR_CORE_RDS_USERNAME }}
-      core_rds_password: ${{ secrets.TF_VAR_CORE_RDS_PASSWORD }}
+      core_server_secrets: ${{ github.event.client_payload.secrets }}
       hosted_zone_id: ${{ secrets.TF_VAR_HOSTED_ZONE_ID }}

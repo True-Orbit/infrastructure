@@ -17,12 +17,12 @@ on:
     secrets:
       aws_ecs_role_arn:
         required: true
-      core_rds_username:
-        required: true
-      core_rds_password:
-        required: true
       hosted_zone_id:
         required: true
+      web_service_secrets:
+        required: false
+      core_server_secrets:
+        required: false
 
 concurrency:
   group: "terraform_apply-${{ inputs.environment }}"
@@ -31,12 +31,13 @@ concurrency:
 env:
   AWS_REGION: us-west-2
   AWS_ECS_ROLE_ARN: ${{ secrets.AWS_ECS_ROLE_ARN }}
-  TF_VAR_core_rds_username: ${{ secrets.core_rds_username }}
-  TF_VAR_core_rds_password: ${{ secrets.core_rds_password }}
-  TF_VAR_hosted_zone_id: ${{ secrets.hosted_zone_id }}
   ENVIRONMENT: ${{ inputs.environment }}
+  
+  TF_VAR_hosted_zone_id: ${{ secrets.hosted_zone_id }}
   TF_VAR_web_service_image_tag: ${{ inputs.web_service_image_tag }}
+  TF_VAR_web_service_secrets: ${{ secrets.web_service_secrets }}
   TF_VAR_core_server_image_tag: ${{ inputs.core_server_image_tag }}
+  TF_VAR_core_server_secrets: ${{ secrets.core_server_secrets }}
 
 jobs:
   terraform_apply:
@@ -71,13 +72,11 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Get old web image tag
+      - name: Set current state in env vars
+        shell: bash
         run: |
-          echo "TF_VAR_old_web_service_image_tag=$(terraform output -raw web_image_tag)" >> $GITHUB_ENV
-
-      - name: Get old core server image tag
-        run: |
-          echo "TF_VAR_old_core_server_image_tag=$(terraform output -raw core_server_image_tag)" >> $GITHUB_ENV
+          chmod +x ./scripts/set_current_state.sh
+          ./scripts/set_current_state.sh
 
       - name: Terraform Plan
         run: terraform plan -out=plan.out

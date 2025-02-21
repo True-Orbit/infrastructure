@@ -28,8 +28,13 @@ data "terraform_remote_state" "current_images" {
 }
 
 locals {
+  web_image_tag       = var.web_service_image_tag != "" ? "${module.ecr_web.repository_url}:${var.web_service_image_tag}" : var.old_web_service_image_tag
+  web_service_secrets = var.web_service_secrets != "" && var.web_service_secrets != null ? var.web_service_secrets : var.old_web_service_image_tag
+}
+
+locals {
   core_server_image_tag = var.core_server_image_tag != "" ? "${module.ecr_core_server.repository_url}:${var.core_server_image_tag}" : var.old_core_server_image_tag
-  web_image_tag         = var.web_service_image_tag != "" ? "${module.ecr_web.repository_url}:${var.web_service_image_tag}" : var.old_web_service_image_tag
+  core_server_secrets   = var.core_server_secrets != "" && var.core_server_secrets != null ? var.core_server_secrets : var.old_core_server_secrets
 }
 
 provider "aws" {
@@ -92,7 +97,7 @@ module "core_server" {
   ecs_iam_role_arn = module.iam.ecs_role_arn
   target_group_arn = module.alb.core_server_target_group_arn
   port             = 4000
-  secrets          = var.core_server_secrets
+  secrets          = local.core_server_secrets
 }
 
 module "web_service" {
@@ -108,5 +113,5 @@ module "web_service" {
   target_group_arn  = module.alb.web_target_group_arn
   port              = 3000
   health_check_path = "/api/web/health"
-  secrets           = var.web_service_secrets
+  secrets           = local.web_service_secrets
 }
