@@ -28,8 +28,8 @@ data "terraform_remote_state" "current_images" {
 }
 
 locals {
-  web_image_tag         = var.web_service_image_tag != "" ? "${module.ecr_web.repository_url}:${var.web_service_image_tag}" : var.old_web_service_image_tag
-  web_service_secrets   = var.web_service_secrets != "" && var.web_service_secrets != null ? var.web_service_secrets : var.old_web_service_image_tag
+  web_image_tag       = var.web_service_image_tag != "" ? "${module.ecr_web.repository_url}:${var.web_service_image_tag}" : var.old_web_service_image_tag
+  web_service_secrets = var.web_service_secrets != "" && var.web_service_secrets != null ? var.web_service_secrets : var.old_web_service_image_tag
 }
 
 locals {
