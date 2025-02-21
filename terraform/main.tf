@@ -96,6 +96,10 @@ module "core_server" {
     {
       name      = "RDS_DEVELOPMENT_SECRETS"
       valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/core-rds/development-dIKJJI"
+    },
+    {
+      name      = "CORE_SERVER_SECRETS"
+      valueFrom = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/core-server/development-0EX2om"
     }
   ]
 }
