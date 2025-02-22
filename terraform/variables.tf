@@ -28,14 +28,14 @@ variable "old_core_server_image_tag" {
 
 variable "core_server_secrets" {
   description = "The secrets to pass to the container"
-  type = string
-  default = "null"
+  type        = string
+  default     = "null"
 }
 
 variable "old_core_server_secrets" {
   description = "The secrets to pass to the container"
-  type = string
-  default = "[]"
+  type        = string
+  default     = "[]"
 }
 
 variable "web_service_image_tag" {
@@ -50,12 +50,12 @@ variable "old_web_service_image_tag" {
 
 variable "web_service_secrets" {
   description = "The secrets to pass to the container"
-  type = string
-  default = "null"
+  type        = string
+  default     = "null"
 }
 
 variable "old_web_service_secrets" {
   description = "The secrets to pass to the container"
-  type = string
-  default = "[]"
+  type        = string
+  default     = "[]"
 }
