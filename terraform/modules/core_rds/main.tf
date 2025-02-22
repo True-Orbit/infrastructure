@@ -56,7 +56,7 @@ resource "aws_db_instance" "core-rds" {
   publicly_accessible    = false
   multi_az               = var.multi_az
   storage_encrypted      = var.storage_encrypted
-  username               = "${var.environment}${local.db_user}"
+  username               = local.db_user
   password               = local.db_password
   db_name                = local.db_name
   port                   = local.port
