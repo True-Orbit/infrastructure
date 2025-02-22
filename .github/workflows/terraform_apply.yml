@@ -13,16 +13,18 @@ on:
       web_service_image_tag:
         type: string
         required: false
+      web_service_secrets:
+        type: string
+        required: false
+      core_server_secrets:
+        type: string
+        required: false
 
     secrets:
       aws_ecs_role_arn:
         required: true
       hosted_zone_id:
         required: true
-      web_service_secrets:
-        required: false
-      core_server_secrets:
-        required: false
 
 concurrency:
   group: "terraform_apply-${{ inputs.environment }}"
