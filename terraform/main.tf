@@ -29,7 +29,7 @@ data "terraform_remote_state" "current_images" {
 
 locals {
   web_image_tag       = var.web_service_image_tag != "" ? "${module.ecr_web.repository_url}:${var.web_service_image_tag}" : var.old_web_service_image_tag
-  web_service_secrets = length(var.web_service_secrets) < 1 ? var.web_service_secrets : var.old_web_service_image_tag
+  web_service_secrets = length(var.web_service_secrets) < 1 ? var.web_service_secrets : var.old_web_service_secrets
 }
 
 locals {
