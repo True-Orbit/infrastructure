@@ -60,7 +60,7 @@ variable "web_service_secrets" {
     name      = string
     valueFrom = string
   }))
-  default = null
+  default = []
 }
 
 variable "old_web_service_secrets" {
@@ -69,5 +69,5 @@ variable "old_web_service_secrets" {
     name      = string
     valueFrom = string
   }))
-  default = null
+  default = []
 }
