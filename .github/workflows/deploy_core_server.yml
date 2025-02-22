@@ -22,8 +22,8 @@ jobs:
     with:
       environment: ${{ github.event.client_payload.environment }}
       core_server_image_tag: ${{ github.event.client_payload.image_tag }}
+      core_server_secrets: '${{ toJson(github.event.client_payload.secrets) }}'
 
     secrets:
       aws_ecs_role_arn: ${{ secrets.AWS_ECS_ROLE_ARN }}
-      core_server_secrets: ${{ github.event.client_payload.secrets }}
       hosted_zone_id: ${{ secrets.TF_VAR_HOSTED_ZONE_ID }}
