@@ -5,7 +5,7 @@ on:
     types: [deploy_core_server]
 
 jobs:
-  deploy_web_service:
+  deploy_core_server:
     # Don't run this job if the image tag is not provided
     if: >
       github.event.client_payload.image_tag != null && 
