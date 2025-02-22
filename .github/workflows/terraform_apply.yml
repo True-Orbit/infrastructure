@@ -75,6 +75,7 @@ jobs:
       - name: Set current state in env vars
         shell: bash
         run: |
+          echo pwd
           chmod +x ./scripts/set_current_state.sh
           ./scripts/set_current_state.sh
 
