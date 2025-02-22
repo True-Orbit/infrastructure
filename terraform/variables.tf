@@ -32,7 +32,7 @@ variable "core_server_secrets" {
     name      = string
     valueFrom = string
   }))
-  default = []
+  default = null
 }
 
 variable "old_core_server_secrets" {
@@ -60,7 +60,7 @@ variable "web_service_secrets" {
     name      = string
     valueFrom = string
   }))
-  default = []
+  default = null
 }
 
 variable "old_web_service_secrets" {

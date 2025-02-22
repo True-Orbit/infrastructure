@@ -29,12 +29,12 @@ data "terraform_remote_state" "current_images" {
 
 locals {
   web_image_tag       = var.web_service_image_tag != "" ? "${module.ecr_web.repository_url}:${var.web_service_image_tag}" : var.old_web_service_image_tag
-  web_service_secrets = var.web_service_secrets != null && length(var.web_service_secrets) < 1 ? var.web_service_secrets : var.old_web_service_secrets
+  web_service_secrets = var.web_service_secrets != null ? var.web_service_secrets : var.old_web_service_secrets
 }
 
 locals {
   core_server_image_tag = var.core_server_image_tag != "" ? "${module.ecr_core_server.repository_url}:${var.core_server_image_tag}" : var.old_core_server_image_tag
-  core_server_secrets   = var.core_server_secrets != null && length(var.core_server_secrets) < 1 ? var.core_server_secrets : var.old_core_server_secrets
+  core_server_secrets   = var.core_server_secrets != null ? var.core_server_secrets : var.old_core_server_secrets
 }
 
 provider "aws" {
