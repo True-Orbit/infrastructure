@@ -36,7 +36,7 @@ locals {
 
 locals {
   core_array_of_secrets = jsondecode(var.core_server_secrets)
-  old_core_array_of_secrets = jsondecode(var.core_server_secrets)
+  old_core_array_of_secrets = jsondecode(var.old_core_server_secrets)
   core_server_image_tag = var.core_server_image_tag != "" ? "${module.ecr_core_server.repository_url}:${var.core_server_image_tag}" : var.old_core_server_image_tag
   core_server_secrets = local.core_array_of_secrets != null ? local.core_array_of_secrets : local.old_core_array_of_secrets
 }
