@@ -10,7 +10,7 @@ jobs:
       toPrint: toJSON(${{ github.event.client_payload.secrets }})
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ env.toPrint }}
+      - run: echo "${{ env.toPrint }}"
 
   deploy_web_service:
     # Don't run this job if the image tag and secrets are not provided
