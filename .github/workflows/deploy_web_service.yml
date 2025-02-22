@@ -22,7 +22,7 @@ jobs:
     with:
       environment: ${{ github.event.client_payload.environment }}
       web_service_image_tag: ${{ github.event.client_payload.image_tag }}
-      web_service_secrets: ${{ github.event.client_payload.secrets }}
+      web_service_secrets: '${{ toJson(github.event.client_payload.secrets) }}'
 
     secrets:
       aws_ecs_role_arn: ${{ secrets.AWS_ECS_ROLE_ARN }}
