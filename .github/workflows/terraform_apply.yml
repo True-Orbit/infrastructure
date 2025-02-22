@@ -56,6 +56,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - run: echo $TF_VAR_web_service_secrets
+
       - name: Configure AWS Credentials and Assume Role
         uses: aws-actions/configure-aws-credentials@v4
         with:
