@@ -28,13 +28,17 @@ data "terraform_remote_state" "current_images" {
 }
 
 locals {
+  array_of_secrets = jsondecode(var.web_service_secrets)
+  old_array_of_secrets = jsondecode(var.old_web_service_secrets)
   web_image_tag       = var.web_service_image_tag != "" ? "${module.ecr_web.repository_url}:${var.web_service_image_tag}" : var.old_web_service_image_tag
-  web_service_secrets = var.web_service_secrets != null ? var.web_service_secrets : var.old_web_service_secrets
+  web_service_secrets = local.array_of_secrets != null ? local.array_of_secrets : local.old_array_of_secrets
 }
 
 locals {
+  array_of_secrets = jsondecode(var.core_server_secrets)
+  old_array_of_secrets = jsondecode(var.core_server_secrets)
   core_server_image_tag = var.core_server_image_tag != "" ? "${module.ecr_core_server.repository_url}:${var.core_server_image_tag}" : var.old_core_server_image_tag
-  core_server_secrets   = var.core_server_secrets != null ? var.core_server_secrets : var.old_core_server_secrets
+  core_server_secrets = local.array_of_secrets != null ? local.array_of_secrets : local.old_array_of_secrets
 }
 
 provider "aws" {
