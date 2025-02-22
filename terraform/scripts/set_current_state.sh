@@ -1,3 +1,5 @@
+echo $(pwd)
+
 chmod +x ./scripts/set_web_service_state.sh
 ./scripts/set_web_service_state.sh
 
