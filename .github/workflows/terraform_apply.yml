@@ -58,9 +58,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - run: echo "TF_VAR_web_service_secrets=$TF_VAR_web_service_secrets"
-      - run: echo "TF_VAR_core_server_secrets=$TF_VAR_core_server_secrets"
-
       - name: Configure AWS Credentials and Assume Role
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -82,9 +79,6 @@ jobs:
         run: |
           chmod +x ./scripts/set_current_state.sh
           ./scripts/set_current_state.sh
-
-      - run: echo "TF_VAR_old_core_server_secrets=$TF_VAR_old_core_server_secrets"
-      - run: echo "TF_VAR_old_web_service_secrets=$TF_VAR_old_web_service_secrets"
 
       - name: Terraform Plan
         run: terraform plan -out=plan.out
