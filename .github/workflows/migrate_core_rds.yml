@@ -10,6 +10,7 @@ on:
       core_server_image_tag:
         type: string
         required: false
+        default: 'null'
       core_server_secrets:
         type: string
         required: false
