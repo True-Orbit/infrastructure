@@ -3,7 +3,7 @@
 vpc_id=$(terraform output -raw vpc_id)
 echo $vpc_id
 
-public_subnet_id=$(terraform output -json public_subnet_id 2>/dev/null || echo [])
+public_subnet_id=$(terraform output -raw public_subnet_id)
 echo $public_subnet_id
 
 export vpc_id="$vpc_id"
