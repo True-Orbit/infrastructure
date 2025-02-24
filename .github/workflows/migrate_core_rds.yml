@@ -56,6 +56,7 @@ jobs:
 
     outputs:
       old_core_server_image_tag: ${{ steps.setOutput.outputs.old_core_server_image_tag }}
+      old_core_server_secrets: ${{ steps.setOutput.outputs.old_core_server_secrets }}
 
     steps:
       - uses: actions/checkout@v4
@@ -85,8 +86,8 @@ jobs:
       - name: Set output variables
         id: setOutput
         run: |
-          echo "TF_VAR_old_core_server_image_tag=$TF_VAR_old_core_server_image_tag" >> $GITHUB_OUTPUT
-          echo "TF_VAR_old_core_server_secrets=$TF_VAR_old_core_server_secrets" >> $GITHUB_OUTPUT
+          echo "old_core_server_image_tag=$TF_VAR_old_core_server_image_tag" >> $GITHUB_OUTPUT
+          echo "old_core_server_secrets=$TF_VAR_old_core_server_secrets" >> $GITHUB_OUTPUT
 
   deploy_core_server:
     needs: set_current_state
@@ -101,10 +102,12 @@ jobs:
       run:
         shell: bash
         working-directory: core_server_ec2
-    
+      
     env:
       TF_VAR_vpc_id: ${{ inputs.vpc_id }}
       TF_VAR_subnet_id: ${{ inputs.subnet_id }}
+      TF_VAR_old_core_server_secrets: ${{ needs.set_current_state.outputs.old_core_server_secrets }}
+      TF_VAR_old_core_server_image_tag: ${{ needs.set_current_state.outputs.old_core_server_image_tag }}
 
     steps:
       - uses: actions/checkout@v4
