@@ -44,7 +44,7 @@ variable "subnet_id" {
 variable "ami_id" {
   description = "The ID of the AMI to use for the Core Server"
   type        = string
-  default     = "ami-027951e78de46a00e"
+  default     = "ami-000089c8d02060104"
 }
 
 variable "instance_type" {
