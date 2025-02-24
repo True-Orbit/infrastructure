@@ -26,7 +26,10 @@ provider "aws" {
 }
 
 data "aws_vpc" "this" {
-  id = var.vpc_id
+  filter {
+    name   = "vpc-id"
+    values = [var.vpc_id]
+  }
 }
 
 data "aws_ecr_repository" "this" {
