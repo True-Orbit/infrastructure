@@ -1,7 +1,7 @@
 name: Terraform Apply
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       environment:
         type: string
@@ -21,10 +21,6 @@ on:
         type: boolean
         required: false
         default: false
-
-    secrets:
-      aws_ecs_role_arn:
-        required: true
 
 concurrency:
   group: "core_server-ec2-${{ inputs.environment }}"
