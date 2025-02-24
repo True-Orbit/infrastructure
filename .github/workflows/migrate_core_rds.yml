@@ -106,9 +106,9 @@ jobs:
     env:
       TF_VAR_vpc_id: ${{ needs.set_current_state.outputs.vpc_id }}
       TF_VAR_subnet_id: ${{ needs.set_current_state.outputs.subnet_id }}
-      TF_VAR_old_core_server_secrets: ${{ needs.set_current_state.outputs.old_core_server_secrets }}
       TF_VAR_old_core_server_image_tag: ${{ needs.set_current_state.outputs.old_core_server_image_tag }}
-
+      TF_VAR_old_core_server_secrets: ${{ needs.set_current_state.outputs.old_core_server_secrets }}
+      
     steps:
       - uses: actions/checkout@v4
 
@@ -118,6 +118,13 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ env.AWS_ECS_ROLE_ARN }}
           role-session-name: DeployWebService
+
+      - name: log
+        run: |
+          echo $TF_VAR_vpc_id
+          echo $TF_VAR_subnet_id
+          echo $TF_VAR_old_core_server_image_tag
+          echo $TF_VAR_old_core_server_secrets
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
