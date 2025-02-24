@@ -17,7 +17,7 @@ terraform {
 }
 
 locals {
-  image_tag = var.core_server_image_tag != "" ? var.core_server_image_tag : var.old_core_server_image_tag
+  image_tag           = var.core_server_image_tag != "" ? var.core_server_image_tag : var.old_core_server_image_tag
   core_server_secrets = length(var.core_server_secrets) < 1 ? var.core_server_secrets : var.old_core_server_secrets
 }
 
@@ -62,9 +62,9 @@ resource "aws_security_group" "this" {
 }
 
 resource "aws_instance" "core_server" {
-  ami           = var.ami_id
-  instance_type = var.instance_type
-  subnet_id     = var.subnet_id
+  ami             = var.ami_id
+  instance_type   = var.instance_type
+  subnet_id       = var.subnet_id
   security_groups = [aws_security_group.this.id]
 
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
@@ -77,10 +77,10 @@ resource "aws_instance" "core_server" {
     service docker start
     usermod -a -G docker ec2-user
 
-    %{ for secret in local.core_server_secrets ~}
+    %{for secret in local.core_server_secrets~}
     export ${secret.name}=$(aws secretsmanager get-secret-value --secret-id ${secret.valueFrom} --query SecretString --output text --region ${var.region})
     echo "Loaded secret ${secret.name}"
-    %{ endfor ~}
+    %{endfor~}
 
     # Login to ECR (this command returns a Docker login command)
     $(aws ecr get-login --no-include-email --region ${var.region})
