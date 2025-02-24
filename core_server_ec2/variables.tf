@@ -11,20 +11,20 @@ variable "old_core_server_image_tag" {
 
 variable "core_server_secrets" {
   description = "The secrets"
-  type        = list(object({
-    name  = string
+  type = list(object({
+    name      = string
     valueFrom = string
   }))
-  default     = []
+  default = []
 }
 
 variable "old_core_server_secrets" {
   description = "The secrets"
-  type        = list(object({
-    name  = string
+  type = list(object({
+    name      = string
     valueFrom = string
   }))
-  default     = []
+  default = []
 }
 
 variable "region" {
@@ -44,7 +44,7 @@ variable "subnet_id" {
 variable "ami_id" {
   description = "The ID of the AMI to use for the Core Server"
   type        = string
-  default    = "ami-027951e78de46a00e"
+  default     = "ami-027951e78de46a00e"
 }
 
 variable "instance_type" {
