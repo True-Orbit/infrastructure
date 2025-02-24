@@ -52,3 +52,15 @@ variable "instance_type" {
   type        = string
   default     = "t3.micro"
 }
+
+variable "migrate" {
+  description = "Whether to run migrations on the Core Server"
+  type        = bool
+  default     = false
+}
+
+variable "seed" {
+  description = "Whether to seed the Core Server"
+  type        = bool
+  default     = false
+}

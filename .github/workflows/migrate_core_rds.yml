@@ -108,6 +108,8 @@ jobs:
       TF_VAR_subnet_id: ${{ needs.set_current_state.outputs.subnet_id }}
       TF_VAR_old_core_server_image_tag: ${{ needs.set_current_state.outputs.old_core_server_image_tag }}
       TF_VAR_old_core_server_secrets: ${{ needs.set_current_state.outputs.old_core_server_secrets }}
+      TF_VAR_migrate: ${{ inputs.migrate }}
+      TF_VAR_seed: ${{ inputs.seed }}
       
     steps:
       - uses: actions/checkout@v4
@@ -141,34 +143,9 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -lock-timeout=5m -auto-approve -input=false plan.out
 
-  run_migrations_and_seeds:
-    needs: deploy_core_server
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: core_server_ec2
-        
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-
-      - name: Run Knex Migrations
-        if: ${{ inputs.migrate == true }}
-        run: npx knex migrate:latest
-          
-      - name: Run Knex Seeds
-        if: ${{ inputs.seed == true }}
-        run: npx knex seed:run
-
   destroy_instance:
     runs-on: ubuntu-latest
-    needs: run_migrations_and_seeds
+    needs: deploy_core_server
     defaults:
       run:
         shell: bash

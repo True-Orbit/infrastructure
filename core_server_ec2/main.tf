@@ -90,7 +90,13 @@ resource "aws_instance" "core_server" {
     
     # Pull and run the container image from ECR
     # Replace <repository_uri> and <tag> with your image details.
-    docker run -d -p 80:80 ${data.aws_ecr_repository.this.repository_url}:${local.image_tag}
+    CONTAINER_ID=$(docker run -d -p 80:80 ${data.aws_ecr_repository.this.repository_url}:${local.image_tag})
+    if [ "${var.migrate}" = "true" ]; then
+      docker exec $CONTAINER_ID npx knex migrate:latest
+    fi
+    if [ "${var.seed}" = "true" ]; then
+      docker exec $CONTAINER_ID npx knex seed:run
+    fi
   EOF
 
   tags = {
