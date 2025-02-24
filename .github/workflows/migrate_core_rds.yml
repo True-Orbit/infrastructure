@@ -54,6 +54,9 @@ jobs:
         shell: bash
         working-directory: true_orbit
 
+    outputs:
+      old_core_server_image_tag: ${{ steps.setOutput.outputs.old_core_server_image_tag }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -78,6 +81,12 @@ jobs:
         run: |
           chmod +x ./scripts/set_current_state.sh
           ./scripts/set_current_state.sh
+
+      - name: Set output variables
+        id: setOutput
+        run: |
+          echo "TF_VAR_old_core_server_image_tag=$TF_VAR_old_core_server_image_tag" >> $GITHUB_OUTPUT
+          echo "TF_VAR_old_core_server_secrets=$TF_VAR_old_core_server_secrets" >> $GITHUB_OUTPUT
 
   deploy_core_server:
     needs: set_current_state
