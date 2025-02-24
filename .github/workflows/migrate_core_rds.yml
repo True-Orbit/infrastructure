@@ -145,15 +145,17 @@ jobs:
 
   destroy_instance:
     runs-on: ubuntu-latest
-    needs: deploy_core_server
+    needs: [set_current_state, deploy_core_server]
     defaults:
       run:
         shell: bash
         working-directory: core_server_ec2
 
     env:
-      TF_VAR_vpc_id: ${{ inputs.vpc_id }}
-      TF_VAR_subnet_id: ${{ inputs.subnet_id }}
+      TF_VAR_vpc_id: ${{ needs.set_current_state.outputs.vpc_id }}
+      TF_VAR_subnet_id: ${{ needs.set_current_state.outputs.subnet_id }}
+      TF_VAR_old_core_server_image_tag: ${{ needs.set_current_state.outputs.old_core_server_image_tag }}
+      TF_VAR_old_core_server_secrets: ${{ needs.set_current_state.outputs.old_core_server_secrets }}
 
     steps:
       - name: Checkout repository
