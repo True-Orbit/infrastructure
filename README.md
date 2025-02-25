@@ -27,3 +27,12 @@
     - direnv is helpful
     - Make sure you have rds, hostedZone in your env variables
     - run `source ./script/set_current_state.sh` to make sure your image variables are up to date
+
+### Core Server Migrations
+  - Handles Migrations and seeds for core server
+  - Navigate to true-orbit folder
+  - `source ./scripts/set_current_state`
+  - Navigate to core_server_ec2
+  - `terraform apply`
+  - Choose migrations and/or seeds
+  - `terraform destroy` when it's done
