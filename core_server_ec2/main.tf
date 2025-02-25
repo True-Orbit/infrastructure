@@ -107,7 +107,6 @@ resource "aws_instance" "core_server" {
     %{endfor~}
 
     CMD="npm run unpackSecrets"
-    CMD="npm run unpackSecrets"
     
     if [ "${var.migrate}" = "true" ]; then
       CMD="$CMD && npm run migrate"
