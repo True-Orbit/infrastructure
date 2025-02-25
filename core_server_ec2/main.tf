@@ -98,7 +98,7 @@ resource "aws_instance" "core_server" {
     $(aws ecr get-login --no-include-email --region ${var.region})
 
     ENV=""
-    CMD="echo 'Starting Core Server'"
+    CMD="source ./scripts/setDbEnv.sh"
 
     %{for secret in local.core_server_secrets~}
     export ${secret.name}=$(aws secretsmanager get-secret-value --secret-id ${secret.valueFrom} --query SecretString --output text --region ${var.region})
