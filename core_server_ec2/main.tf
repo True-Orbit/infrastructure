@@ -103,10 +103,10 @@ resource "aws_instance" "core_server" {
     %{for secret in local.core_server_secrets~}
     export ${secret.name}=$(aws secretsmanager get-secret-value --secret-id ${secret.valueFrom} --query SecretString --output text --region ${var.region})
     echo "Loaded secret ${secret.name}"
-    for key in $(echo "$secret_json" | jq -r 'keys[]'); do
-      value=$(echo "$secret_json" | jq -r --arg k "$key" '.[$k]')
+    for key in $(echo "${"$"}${secret.name}" | jq -r 'keys[]'); do
+      value=$(echo "${"$"}${secret.name}" | jq -r --arg k "$key" '.[$k]')
       export "$key"="$value"
-      ENV="$ENV --env $key=\"\$${key}\""
+      ENV="$ENV --env $key=$value"
     done
     %{endfor~}
     
