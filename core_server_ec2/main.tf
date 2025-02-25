@@ -104,13 +104,13 @@ resource "aws_instance" "core_server" {
     ENV="$ENV --env ${secret.name}=\"${"$"}${secret.name}\""
     %{endfor~}
 
-    CMD="npm unpackSecrets"
+    CMD="npm run unpackSecrets"
     
     if [ "${var.migrate}" = "true" ]; then
-      CMD="$CMD && npm migrate"
+      CMD="$CMD && npm run migrate"
     fi
     if [ "${var.seed}" = "true" ]; then
-      CMD="$CMD && npm seed"
+      CMD="$CMD && npm run seed"
     fi
 
     # Pull and run the container image from ECR
