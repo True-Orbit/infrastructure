@@ -18,7 +18,7 @@ terraform {
 
 locals {
   image_tag           = var.core_server_image_tag != "" ? var.core_server_image_tag : var.old_core_server_image_tag
-  core_server_secrets = length(var.core_server_secrets) < 1 ? var.core_server_secrets : var.old_core_server_secrets
+  core_server_secrets = length(var.core_server_secrets) > 0 ? var.core_server_secrets : var.old_core_server_secrets
 }
 
 provider "aws" {
@@ -74,38 +74,47 @@ resource "aws_security_group_rule" "allow_ssh" {
 }
 
 resource "aws_instance" "core_server" {
-  ami             = var.ami_id
-  instance_type   = var.instance_type
-  subnet_id       = var.subnet_id
-  security_groups = [aws_security_group.this.id]
-
+  ami                  = var.ami_id
+  instance_type        = var.instance_type
+  subnet_id            = var.subnet_id
+  security_groups      = [aws_security_group.this.id]
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 
   user_data = <<-EOF
     #!/bin/bash
+
+    # set logs
+    exec > /var/log/user-data.log 2>&1
+    set -x
+
     # Update and install Docker
     yum update -y
     amazon-linux-extras install docker -y
     service docker start
     usermod -a -G docker ec2-user
 
+    # Login to ECR (this command returns a Docker login command)
+    $(aws ecr get-login --no-include-email --region ${var.region})
+
+    ENV=""
+
     %{for secret in local.core_server_secrets~}
     export ${secret.name}=$(aws secretsmanager get-secret-value --secret-id ${secret.valueFrom} --query SecretString --output text --region ${var.region})
     echo "Loaded secret ${secret.name}"
+    ENV="$ENV --env ${secret.name}=\"${"$"}${secret.name}\""
     %{endfor~}
 
-    # Login to ECR (this command returns a Docker login command)
-    $(aws ecr get-login --no-include-email --region ${var.region})
+    CMD="npm unpackSecrets"
     
+    if [ "${var.migrate}" = "true" ]; then
+      CMD="$CMD && npm migrate"
+    elif [ "${var.seed}" = "true" ]; then
+      CMD="$CMD && npm seed"
+    fi
+
     # Pull and run the container image from ECR
     # Replace <repository_uri> and <tag> with your image details.
-    CONTAINER_ID=$(docker run -d -p 80:80 ${data.aws_ecr_repository.this.repository_url}:${local.image_tag})
-    if [ "${var.migrate}" = "true" ]; then
-      docker exec $CONTAINER_ID npx knex migrate:latest
-    fi
-    if [ "${var.seed}" = "true" ]; then
-      docker exec $CONTAINER_ID npx knex seed:run
-    fi
+    CONTAINER_ID=$(docker run -d -p 4000:4000 $ENV ${local.image_tag} bash -c "$CMD")
   EOF
 
   tags = {
