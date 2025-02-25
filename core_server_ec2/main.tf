@@ -101,13 +101,15 @@ resource "aws_instance" "core_server" {
     %{for secret in local.core_server_secrets~}
     export ${secret.name}=$(aws secretsmanager get-secret-value --secret-id ${secret.valueFrom} --query SecretString --output text --region ${var.region})
     echo "Loaded secret ${secret.name}"
-    CMD="${CMD} --env ${secret.name}=\$${secret.name}"
+    CMD="\\$CMD --env ${secret.name}=$$${secret.name}"
     %{endfor~}
+
+    CMD="\\$CMD npm unpackSecrets"
     
     if [ "${var.migrate}" = "true" ]; then
-      CMD="${CMD} && npm migrate"
+      CMD="\\$CMD && npm migrate"
     elif [ "${var.seed}" = "true" ]; then
-      CMD="${CMD} && npm seed"
+      CMD="\\$CMD && npm seed"
     fi
 
     # Pull and run the container image from ECR
