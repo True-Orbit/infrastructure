@@ -101,7 +101,7 @@ resource "aws_instance" "core_server" {
     %{for secret in local.core_server_secrets~}
     export ${secret.name}=$(aws secretsmanager get-secret-value --secret-id ${secret.valueFrom} --query SecretString --output text --region ${var.region})
     echo "Loaded secret ${secret.name}"
-    ENV="$ENV --env ${secret.name}=\$\${secret.name}"
+    ENV="$ENV --env ${secret.name}=\"${"$"}${secret.name}\""
     %{endfor~}
 
     CMD="npm unpackSecrets"
@@ -114,7 +114,7 @@ resource "aws_instance" "core_server" {
 
     # Pull and run the container image from ECR
     # Replace <repository_uri> and <tag> with your image details.
-    CONTAINER_ID=$(docker run -d -p 4000:4000 $ENV ${data.aws_ecr_repository.this.repository_url}:${local.image_tag} bash -c "$CMD")
+    CONTAINER_ID=$(docker run -d -p 4000:4000 $ENV ${local.image_tag} bash -c "$CMD")
   EOF
 
   tags = {
