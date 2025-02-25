@@ -97,24 +97,28 @@ resource "aws_instance" "core_server" {
     $(aws ecr get-login --no-include-email --region ${var.region})
 
     ENV=""
+    CMD="echo 'Starting Core Server'"
 
     %{for secret in local.core_server_secrets~}
     export ${secret.name}=$(aws secretsmanager get-secret-value --secret-id ${secret.valueFrom} --query SecretString --output text --region ${var.region})
     echo "Loaded secret ${secret.name}"
     ENV="$ENV --env ${secret.name}=\"${"$"}${secret.name}\""
+    CMD="$CMD && process.env.${secret.name} = JSON.parse(process.env.${secret.name})"
     %{endfor~}
 
-    CMD="npm unpackSecrets"
+    CMD="npm run unpackSecrets"
+    CMD="npm run unpackSecrets"
     
     if [ "${var.migrate}" = "true" ]; then
-      CMD="$CMD && npm migrate"
-    elif [ "${var.seed}" = "true" ]; then
-      CMD="$CMD && npm seed"
+      CMD="$CMD && npm run migrate"
+    fi
+    if [ "${var.seed}" = "true" ]; then
+      CMD="$CMD && npm run seed"
     fi
 
     # Pull and run the container image from ECR
     # Replace <repository_uri> and <tag> with your image details.
-    CONTAINER_ID=$(docker run -d -p 4000:4000 $ENV ${local.image_tag} bash -c "$CMD")
+    CONTAINER_ID=$(docker run -d -p 4000:4000 $ENV --entrypoint /bin/sh ${local.image_tag} -c "$CMD")
   EOF
 
   tags = {
