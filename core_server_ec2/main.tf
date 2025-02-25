@@ -74,10 +74,10 @@ resource "aws_security_group_rule" "allow_ssh" {
 }
 
 resource "aws_instance" "core_server" {
-  ami             = var.ami_id
-  instance_type   = var.instance_type
-  subnet_id       = var.subnet_id
-  security_groups = [aws_security_group.this.id]
+  ami                  = var.ami_id
+  instance_type        = var.instance_type
+  subnet_id            = var.subnet_id
+  security_groups      = [aws_security_group.this.id]
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 
   user_data = <<-EOF
