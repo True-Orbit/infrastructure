@@ -59,3 +59,26 @@ variable "old_web_service_secrets" {
   type        = string
   default     = "[]"
 }
+
+variable "auth_service_image_tag" {
+  type        = string
+  description = "The tag for the Docker image"
+}
+
+variable "old_auth_service_image_tag" {
+  type        = string
+  description = "The tag for the old Docker image"
+}
+
+
+variable "auth_service_secrets" {
+  description = "The secrets to pass to the container"
+  type        = string
+  default     = "null"
+}
+
+variable "old_auth_service_secrets" {
+  description = "The secrets to pass to the container"
+  type        = string
+  default     = "[]"
+}
