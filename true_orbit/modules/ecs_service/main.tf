@@ -118,3 +118,39 @@ resource "aws_ecs_service" "this" {
     container_port   = var.port
   }
 }
+
+resource "aws_lb_target_group" "this" {
+  name        = "${local.kebab_name}-target-group"
+  port        = var.port
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  target_type = "ip"
+
+  health_check {
+    path                = var.health_check_path
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 3
+    unhealthy_threshold = 2
+  }
+}
+
+resource "aws_lb_listener_rule" "api_rule" {
+  listener_arn = var.alb_listener_arn
+  priority     = var.alb_priority
+
+  tags = {
+    Name = "${local.kebab_name}-forward"
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.this.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api/*"]
+    }
+  }
+}

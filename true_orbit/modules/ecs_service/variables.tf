@@ -86,3 +86,13 @@ variable "memory" {
   type        = string
   default     = "512"
 }
+
+variable "alb_listener_arn" {
+  description = "The listener for the load balancer"
+  type        = string
+}
+
+variable "alb_priority" {
+  description = "Where should this priority be placed in the listener"
+  type        = string
+}
