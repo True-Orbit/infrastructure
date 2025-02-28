@@ -87,7 +87,12 @@ variable "alb_listener_arn" {
   type        = string
 }
 
-variable "alb_priority" {
-  description = "Where should this priority be placed in the listener"
-  type        = string
+variable "listener_priority" {
+  description = "The priority for the listener rule"
+  type        = number
+}
+
+variable "listener_paths" {
+  description = "The listener patterns to use for the listener rule"
+  type        = list(string)
 }

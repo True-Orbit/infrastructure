@@ -129,8 +129,8 @@ module "auth_rds" {
 #   health_check_path = "/health"
 #   secrets           = local.auth_service_secrets
 #   alb_listener_arn  = module.alb.listener_arn
-#   alb_priority      = 10
-# }
+#   listener_priority = 10
+#   listener_paths    = ["/login", "/logout", "/refresh-token"]
 
 module "web_service" {
   source            = "./modules/ecs_service"
@@ -146,7 +146,8 @@ module "web_service" {
   health_check_path = "/api/web/health"
   secrets           = local.web_service_secrets
   alb_listener_arn  = module.alb.listener_arn
-  alb_priority      = 20
+  listener_priority = 20
+  listener_paths    = ["/api/web/*"]
 }
 
 module "core_server" {
@@ -163,5 +164,6 @@ module "core_server" {
   health_check_path = "/api/health"
   secrets           = local.core_server_secrets
   alb_listener_arn  = module.alb.listener_arn
-  alb_priority      = 30
+  listener_priority = 30
+  listener_paths    = ["/api/*"]
 }
