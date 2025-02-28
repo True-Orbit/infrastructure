@@ -44,11 +44,6 @@ variable "ecs_iam_role_arn" {
   type        = string
 }
 
-variable "target_group_arn" {
-  description = "The ARN of the target group"
-  type        = string
-}
-
 variable "port" {
   description = "The port the container listens on"
   type        = number
