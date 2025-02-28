@@ -44,8 +44,8 @@ locals {
 locals {
   auth_array_of_secrets     = jsondecode(var.auth_service_secrets)
   old_auth_array_of_secrets = jsondecode(var.old_auth_service_secrets)
-  auth_service_image_tag     = var.auth_service_image_tag != "" ? "${module.ecr_auth_service.repository_url}:${var.auth_service_image_tag}" : var.old_auth_service_image_tag
-  auth_service_secrets       = local.auth_array_of_secrets != null ? local.auth_array_of_secrets : local.old_auth_array_of_secrets
+  auth_service_image_tag    = var.auth_service_image_tag != "" ? "${module.ecr_auth_service.repository_url}:${var.auth_service_image_tag}" : var.old_auth_service_image_tag
+  auth_service_secrets      = local.auth_array_of_secrets != null ? local.auth_array_of_secrets : local.old_auth_array_of_secrets
 }
 
 provider "aws" {
