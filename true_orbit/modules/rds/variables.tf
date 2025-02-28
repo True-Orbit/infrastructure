@@ -1,3 +1,8 @@
+variable "name" {
+  description = "The name of the RDS instance"
+  type        = string
+}
+
 variable "environment" {
   description = "The environment name (e.g., dev, prod)"
   type        = string
@@ -47,4 +52,9 @@ variable "skip_final_snapshot" {
   description = "Whether to skip the final snapshot before deletion"
   type        = bool
   default     = true
+}
+
+variable "secrets_arn" {
+  description = "The ARN of the Secrets Manager secret"
+  type        = string
 }
