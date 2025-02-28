@@ -90,10 +90,21 @@ module "ecr_web" {
 }
 
 module "core_rds" {
-  source      = "./modules/core_rds"
+  source      = "./modules/rds"
+  name        = "core"
   environment = var.environment
   vpc_id      = module.foundation.vpc_id
   subnet_ids  = [module.foundation.private_subnet_a_id, module.foundation.private_subnet_b_id]
+  secrets_arn = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/core-rds/development-dIKJJI"
+}
+
+module "auth_rds" {
+  source      = "./modules/rds"
+  name        = "auth"
+  environment = var.environment
+  vpc_id      = module.foundation.vpc_id
+  subnet_ids  = [module.foundation.private_subnet_a_id, module.foundation.private_subnet_b_id]
+  secrets_arn = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/core-rds/development-dIKJJI"
 }
 
 module "auth_service" {
