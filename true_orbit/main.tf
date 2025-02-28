@@ -83,17 +83,17 @@ module "alb_waf" {
 
 module "ecr_auth_service" {
   source = "./modules/ecr"
-  name = "auth-service"
+  name   = "auth-service"
 }
 
 module "ecr_core_server" {
   source = "./modules/ecr"
-  name = "core-server"
+  name   = "core-server"
 }
 
 module "ecr_web" {
   source = "./modules/ecr"
-  name = "web"
+  name   = "web"
 }
 
 module "core_rds" {
