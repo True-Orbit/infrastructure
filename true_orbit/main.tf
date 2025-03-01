@@ -120,17 +120,17 @@ module "auth_rds" {
 #   environment       = var.environment
 #   repository_url    = module.ecr_auth_service.url
 #   image_tag         = local.auth_service_image_tag
+#   secrets           = local.auth_service_secrets
 #   vpc_id            = module.foundation.vpc_id
 #   ecs_cluster_id    = module.foundation.ecs_cluster_id
 #   subnet_id         = module.foundation.private_subnet_a_id
 #   ecs_iam_role_arn  = module.iam.ecs_role_arn
-#   target_group_arn  = module.alb.auth_service_target_group_arn
 #   port              = 3000
 #   health_check_path = "/health"
-#   secrets           = local.auth_service_secrets
 #   alb_listener_arn  = module.alb.listener_arn
 #   listener_priority = 10
-#   listener_paths    = ["/login", "/logout", "/refresh-token"]
+#   listener_paths    = ["/auth/*"]
+# }
 
 module "web_service" {
   source            = "./modules/ecs_service"
@@ -138,13 +138,13 @@ module "web_service" {
   environment       = var.environment
   repository_url    = module.ecr_web.repository_url
   image_tag         = local.web_image_tag
+  secrets           = local.web_service_secrets
   vpc_id            = module.foundation.vpc_id
   ecs_cluster_id    = module.foundation.ecs_cluster_id
   subnet_id         = module.foundation.private_subnet_a_id
   ecs_iam_role_arn  = module.iam.ecs_role_arn
   port              = 3001
   health_check_path = "/api/web/health"
-  secrets           = local.web_service_secrets
   alb_listener_arn  = module.alb.listener_arn
   listener_priority = 20
   listener_paths    = ["/api/web/*"]
@@ -156,13 +156,13 @@ module "core_server" {
   environment       = var.environment
   repository_url    = module.ecr_core_server.repository_url
   image_tag         = local.core_server_image_tag
+  secrets           = local.core_server_secrets
   vpc_id            = module.foundation.vpc_id
   ecs_cluster_id    = module.foundation.ecs_cluster_id
   subnet_id         = module.foundation.private_subnet_a_id
   ecs_iam_role_arn  = module.iam.ecs_role_arn
   port              = 4000
   health_check_path = "/api/health"
-  secrets           = local.core_server_secrets
   alb_listener_arn  = module.alb.listener_arn
   listener_priority = 30
   listener_paths    = ["/api/*"]
