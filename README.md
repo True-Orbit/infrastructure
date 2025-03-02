@@ -29,6 +29,12 @@
   mkcert local.trueorbit.me
   ```
   - then copy the 2 certs to `/opt/homebrew/etc/nginx/ssl/`
+  - Finally, change the ownership of the certs so the nginx user can use them
+  ```
+  sudo chmod 644 /opt/homebrew/etc/nginx/ssl/local.trueorbit.me.pem
+  sudo chmod 644 /opt/homebrew/etc/nginx/ssl/local.trueorbit.me-key.pem
+
+  ```
 
   - Include true orbit server config in your Nginx config under the http block
     - Might need to create folder external-config
