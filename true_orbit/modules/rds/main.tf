@@ -1,5 +1,5 @@
 data "aws_secretsmanager_secret_version" "db_secret" {
-  secret_id = "arn:aws:secretsmanager:us-west-2:267135861046:secret:true-orbit/core-rds/development-dIKJJI"
+  secret_id = var.secrets_arn
 }
 
 locals {
@@ -16,35 +16,35 @@ resource "aws_db_subnet_group" "this" {
   subnet_ids = var.subnet_ids
 
   tags = {
-    Name = "core-rds-subnet-group"
+    Name = "${var.name}-rds-subnet-group"
     app  = "true-orbit"
     env  = var.environment
   }
 }
 
-resource "aws_security_group" "core_rds_sg" {
+resource "aws_security_group" "this" {
   name        = "${var.environment}-rds-sg"
   description = "Security group for RDS instance"
   vpc_id      = var.vpc_id
 
   tags = {
-    Name = "core-rds-sg"
+    Name = "${var.name}-rds-sg"
     env  = var.environment
     app  = "true-orbit"
   }
 }
 
-resource "aws_security_group_rule" "core_rds_sg_ingress" {
+resource "aws_security_group_rule" "ingress" {
   type              = "ingress"
-  description       = "Allow inbound on port ${local.port} for core server"
+  description       = "Allow inbound on port ${local.port} for ${var.name} server"
   from_port         = local.port
   to_port           = local.port
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.core_rds_sg.id
+  security_group_id = aws_security_group.this.id
 }
 
-resource "aws_db_instance" "core-rds" {
+resource "aws_db_instance" "this" {
   identifier             = local.rds_identifier
   engine                 = "postgres"
   engine_version         = "17.2"
@@ -52,7 +52,7 @@ resource "aws_db_instance" "core-rds" {
   allocated_storage      = var.allocated_storage
   storage_type           = "gp2"
   db_subnet_group_name   = aws_db_subnet_group.this.name
-  vpc_security_group_ids = [aws_security_group.core_rds_sg.id]
+  vpc_security_group_ids = [aws_security_group.this.id]
   publicly_accessible    = false
   multi_az               = var.multi_az
   storage_encrypted      = var.storage_encrypted
@@ -65,6 +65,6 @@ resource "aws_db_instance" "core-rds" {
   tags = {
     env  = var.environment
     app  = "true-orbit"
-    Name = "core-rds-instance"
+    Name = "${var.name}-rds-instance"
   }
 }

@@ -44,11 +44,6 @@ variable "ecs_iam_role_arn" {
   type        = string
 }
 
-variable "target_group_arn" {
-  description = "The ARN of the target group"
-  type        = string
-}
-
 variable "port" {
   description = "The port the container listens on"
   type        = number
@@ -85,4 +80,19 @@ variable "memory" {
   description = "The amount of memory to allocate to the container"
   type        = string
   default     = "512"
+}
+
+variable "alb_listener_arn" {
+  description = "The listener for the load balancer"
+  type        = string
+}
+
+variable "listener_priority" {
+  description = "The priority for the listener rule"
+  type        = number
+}
+
+variable "listener_paths" {
+  description = "The listener patterns to use for the listener rule"
+  type        = list(string)
 }

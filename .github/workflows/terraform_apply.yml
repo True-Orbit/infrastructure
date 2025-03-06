@@ -10,13 +10,19 @@ on:
       core_server_image_tag:
         type: string
         required: false
+      core_server_secrets:
+          type: string
+          required: false
       web_service_image_tag:
         type: string
         required: false
       web_service_secrets:
         type: string
         required: false
-      core_server_secrets:
+      auth_service_image_tag:
+        type: string
+        required: false
+      auth_service_secrets:
         type: string
         required: false
 
@@ -40,6 +46,8 @@ env:
   TF_VAR_web_service_secrets: "${{ inputs.web_service_secrets || 'null' }}"
   TF_VAR_core_server_image_tag: ${{ inputs.core_server_image_tag }}
   TF_VAR_core_server_secrets: "${{ inputs.core_server_secrets || 'null' }}"
+  TF_VAR_auth_service_image_tag: ${{ inputs.auth_service_image_tag }}
+  TF_VAR_auth_service_secrets: "${{ inputs.auth_service_secrets || 'null' }}"
 
 jobs:
   terraform_apply:

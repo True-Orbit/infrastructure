@@ -8,9 +8,32 @@
   - Pull down repos
   - Follow their setup instructions
   - Download and run Nginx
+  - Install a ssl certificate 
+  ```
+  brew install mkcert
+  brew install nss # if you use Firefox
+  ```
   - Download and add the local nginx config
   ```
-  curl -o /opt/homebrew/etc/nginx/external-config/true-orbit.conf https://raw.githubusercontent.com/True-Orbit/infrastructure/main/local-nginx.conf
+  curl -o /opt/homebrew/etc/nginx/external-config/true-orbit.conf https://raw.githubusercontent.com/True-Orbit/infrastructure/main/local/local-nginx.conf
+  ```
+  - Copy the ssl certificates
+  ```
+   curl -o /opt/homebrew/etc/nginx/ssl/local.trueorbit.me.pem https://raw.githubusercontent.com/True-Orbit/infrastructure/main/local/local.trueorbit.me.pem
+  ```
+  ```
+   curl -o /opt/homebrew/etc/nginx/ssl/local.trueorbit.me-key.pem https://raw.githubusercontent.com/True-Orbit/infrastructure/main/local/local.trueorbit.me-key.pem
+  ```
+  - Or make your own
+  ```
+  mkcert local.trueorbit.me
+  ```
+  - then copy the 2 certs to `/opt/homebrew/etc/nginx/ssl/`
+  - Finally, change the ownership of the certs so the nginx user can use them
+  ```
+  sudo chmod 644 /opt/homebrew/etc/nginx/ssl/local.trueorbit.me.pem
+  sudo chmod 644 /opt/homebrew/etc/nginx/ssl/local.trueorbit.me-key.pem
+
   ```
 
   - Include true orbit server config in your Nginx config under the http block
