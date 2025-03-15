@@ -12,7 +12,7 @@ locals {
 }
 
 resource "aws_db_subnet_group" "this" {
-  name       = "${var.environment}-db-subnet-group"
+  name       = "${var.environment}-${var.name}-db-subnet-group"
   subnet_ids = var.subnet_ids
 
   tags = {
@@ -23,7 +23,7 @@ resource "aws_db_subnet_group" "this" {
 }
 
 resource "aws_security_group" "this" {
-  name        = "${var.environment}-rds-sg"
+  name        = "${var.environment}-${var.name}-rds-sg"
   description = "Security group for RDS instance"
   vpc_id      = var.vpc_id
 

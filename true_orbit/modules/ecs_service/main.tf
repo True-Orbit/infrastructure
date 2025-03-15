@@ -14,24 +14,6 @@ resource "aws_security_group" "this" {
   }
 }
 
-resource "aws_vpc_endpoint" "ecr_api" {
-  vpc_id            = var.vpc_id
-  service_name      = "com.amazonaws.us-west-2.ecr.api"
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = [var.subnet_id]
-
-  security_group_ids = [aws_security_group.this.id]
-}
-
-resource "aws_vpc_endpoint" "ecr_dkr" {
-  vpc_id            = var.vpc_id
-  service_name      = "com.amazonaws.us-west-2.ecr.dkr"
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = [var.subnet_id]
-
-  security_group_ids = [aws_security_group.this.id]
-}
-
 resource "aws_security_group_rule" "http_ingress" {
   type              = "ingress"
   description       = "Allow inbound on port ${var.port} for the ${var.name}"

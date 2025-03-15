@@ -3,7 +3,7 @@ output "registry_id" {
   value       = aws_ecr_repository.this.id
 }
 
-output "repository_url" {
+output "url" {
   description = "The URL of the ECR repository"
   value       = aws_ecr_repository.this.repository_url
 }
