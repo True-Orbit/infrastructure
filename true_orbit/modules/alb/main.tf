@@ -44,7 +44,7 @@ resource "aws_security_group_rule" "alb_sg_egress" {
   security_group_id = aws_security_group.alb_sg.id
 }
 
-resource "aws_lb" "main" {
+resource "aws_lb" "this" {
   name               = "TO-${var.environment}-${local.sector}-alb"
   internal           = var.internal
   load_balancer_type = "application"
@@ -77,7 +77,7 @@ resource "aws_lb_target_group" "default" {
 }
 
 resource "aws_lb_listener" "https" {
-  load_balancer_arn = aws_lb.main.arn
+  load_balancer_arn = aws_lb.this.arn
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
@@ -90,7 +90,7 @@ resource "aws_lb_listener" "https" {
 }
 
 resource "aws_lb_listener" "http" {
-  load_balancer_arn = aws_lb.main.arn
+  load_balancer_arn = aws_lb.this.arn
   port              = 80
   protocol          = "HTTP"
 

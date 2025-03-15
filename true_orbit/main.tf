@@ -83,8 +83,8 @@ resource "aws_route53_record" "true_orbit_alb" {
   type    = "A"
 
   alias {
-    name                   = module.domain.dns_name
-    zone_id                = module.domain.dns_zone_id
+    name                   = module.public_alb.dns_name
+    zone_id                = module.public_alb.zone_id
     evaluate_target_health = true
   }
 }
@@ -102,7 +102,7 @@ module "private_alb" {
 
 module "alb_waf" {
   source  = "./modules/waf"
-  alb_arn = module.public_alb.alb_arn
+  alb_arn = module.public_alb.arn
 }
 
 module "ecr_auth_service" {
