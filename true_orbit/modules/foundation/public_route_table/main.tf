@@ -11,11 +11,11 @@ resource "aws_route_table" "this" {
 
   route {
     cidr_block     = var.cidr_block
-    nat_gateway_id = var.nat_gateway_id
+    gateway_id     = var.gateway_id
   }
 
   tags = {
-    Name        = "private-route-table-${local.subnet_name}"
+    Name        = "${local.sector}-route-table-${local.subnet_name}"
     sector      = local.sector
     environment = local.environment
     app         = local.app
@@ -23,7 +23,7 @@ resource "aws_route_table" "this" {
   }
 }
 
-resource "aws_route_table_association" "private_subnet_association" {
-  subnet_id      = var.private_subnet_id
+resource "aws_route_table_association" "public_subnet_association" {
+  subnet_id      = var.subnet_id
   route_table_id = aws_route_table.this.id
 }
