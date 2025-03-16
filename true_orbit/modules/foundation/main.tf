@@ -1,5 +1,5 @@
 resource "aws_vpc" "this" {
-  cidr_block = var.vpc_cidr_block
+  cidr_block           = var.vpc_cidr_block
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
@@ -28,11 +28,11 @@ module "public_subnet_a" {
 }
 
 module "route_table_public_a" {
-  source            = "./public_route_table"
-  vpc_id            = aws_vpc.this.id
-  gateway_id        = aws_internet_gateway.gw.id
-  subnet_tags       = module.public_subnet_a.tags
-  subnet_id         = module.public_subnet_a.id
+  source      = "./public_route_table"
+  vpc_id      = aws_vpc.this.id
+  gateway_id  = aws_internet_gateway.gw.id
+  subnet_tags = module.public_subnet_a.tags
+  subnet_id   = module.public_subnet_a.id
 }
 
 module "nat_gateway_a" {
@@ -42,11 +42,11 @@ module "nat_gateway_a" {
 }
 
 module "route_table_private_a" {
-  source            = "./private_route_table"
-  vpc_id            = aws_vpc.this.id
-  nat_gateway_id    = module.nat_gateway_a.id
-  subnet_tags       = module.private_subnet_a.tags
-  subnet_id         = module.private_subnet_a.id
+  source         = "./private_route_table"
+  vpc_id         = aws_vpc.this.id
+  nat_gateway_id = module.nat_gateway_a.id
+  subnet_tags    = module.private_subnet_a.tags
+  subnet_id      = module.private_subnet_a.id
 }
 
 module "private_subnet_a" {
@@ -70,11 +70,11 @@ module "public_subnet_b" {
 }
 
 module "route_table_public_b" {
-  source            = "./public_route_table"
-  vpc_id            = aws_vpc.this.id
-  gateway_id        = aws_internet_gateway.gw.id
-  subnet_tags       = module.public_subnet_b.tags
-  subnet_id         = module.public_subnet_b.id
+  source      = "./public_route_table"
+  vpc_id      = aws_vpc.this.id
+  gateway_id  = aws_internet_gateway.gw.id
+  subnet_tags = module.public_subnet_b.tags
+  subnet_id   = module.public_subnet_b.id
 }
 
 module "nat_gateway_b" {
@@ -84,11 +84,11 @@ module "nat_gateway_b" {
 }
 
 module "route_table_private_b" {
-  source            = "./private_route_table"
-  vpc_id            = aws_vpc.this.id
-  nat_gateway_id    = module.nat_gateway_b.id
-  subnet_tags       = module.private_subnet_b.tags
-  subnet_id         = module.private_subnet_b.id
+  source         = "./private_route_table"
+  vpc_id         = aws_vpc.this.id
+  nat_gateway_id = module.nat_gateway_b.id
+  subnet_tags    = module.private_subnet_b.tags
+  subnet_id      = module.private_subnet_b.id
 }
 
 module "private_subnet_b" {

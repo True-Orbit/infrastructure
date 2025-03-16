@@ -4,11 +4,11 @@ resource "aws_security_group" "vpc_endpoint_sg" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description      = "Allow inbound HTTPS from ECS tasks"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    security_groups  = var.sg_ids
+    description     = "Allow inbound HTTPS from ECS tasks"
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    security_groups = var.sg_ids
   }
 
   egress {
