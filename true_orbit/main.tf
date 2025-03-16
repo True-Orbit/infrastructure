@@ -150,7 +150,7 @@ module "auth_service" {
   subnet_id         = module.foundation.private_subnet_a_id
   ecs_iam_role_arn  = module.iam.ecs_role_arn
   port              = 3000
-  health_check_path = "/health"
+  health_check_path = "/auth/health"
   alb_listener_arn  = module.public_alb.listener_arn
   listener_priority = 10
   listener_paths    = ["/auth/*"]
