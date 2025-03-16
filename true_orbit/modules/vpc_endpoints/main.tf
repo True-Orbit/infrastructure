@@ -4,11 +4,11 @@ resource "aws_security_group" "vpc_endpoint_sg" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description      = "Allow inbound HTTPS from ECS tasks"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    security_groups  = var.sg_ids
+    description     = "Allow inbound HTTPS from ECS tasks"
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    security_groups = var.sg_ids
   }
 
   egress {
@@ -30,7 +30,7 @@ resource "aws_vpc_endpoint" "ecr_api" {
   vpc_endpoint_type = "Interface"
   subnet_ids        = var.private_subnet_ids
 
-  security_group_ids = var.sg_ids
+  security_group_ids = [aws_security_group.vpc_endpoint_sg.id]
 
   tags = {
     Name = "ecr-api"
@@ -43,7 +43,7 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
   vpc_endpoint_type = "Interface"
   subnet_ids        = var.private_subnet_ids
 
-  security_group_ids = var.sg_ids
+  security_group_ids = [aws_security_group.vpc_endpoint_sg.id]
 
   tags = {
     Name = "ecr-dkr"
@@ -56,7 +56,7 @@ resource "aws_vpc_endpoint" "secretsmanager" {
   vpc_endpoint_type = "Interface"
   subnet_ids        = var.private_subnet_ids
 
-  security_group_ids = var.sg_ids
+  security_group_ids = [aws_security_group.vpc_endpoint_sg.id]
 
   private_dns_enabled = true
 
