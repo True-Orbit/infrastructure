@@ -1,5 +1,9 @@
+locals {
+  sector = var.internal ? "private" : "public"
+}
+
 resource "aws_security_group" "alb_sg" {
-  name        = "${var.environment}-alb-sg"
+  name        = "${var.environment}-${local.sector}-alb-sg"
   description = "Security group for ALB instance"
   vpc_id      = var.vpc_id
 
@@ -40,9 +44,9 @@ resource "aws_security_group_rule" "alb_sg_egress" {
   security_group_id = aws_security_group.alb_sg.id
 }
 
-resource "aws_lb" "main" {
-  name               = "true-orbit-${var.environment}-alb"
-  internal           = false
+resource "aws_lb" "this" {
+  name               = "TO-${var.environment}-${local.sector}-alb"
+  internal           = var.internal
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
   subnets            = var.subnet_ids
@@ -57,7 +61,7 @@ resource "aws_lb" "main" {
 }
 
 resource "aws_lb_target_group" "default" {
-  name        = "default-target-group"
+  name        = "default-${local.sector}-target-group"
   port        = 3001
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -73,7 +77,7 @@ resource "aws_lb_target_group" "default" {
 }
 
 resource "aws_lb_listener" "https" {
-  load_balancer_arn = aws_lb.main.arn
+  load_balancer_arn = aws_lb.this.arn
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
@@ -86,7 +90,7 @@ resource "aws_lb_listener" "https" {
 }
 
 resource "aws_lb_listener" "http" {
-  load_balancer_arn = aws_lb.main.arn
+  load_balancer_arn = aws_lb.this.arn
   port              = 80
   protocol          = "HTTP"
 
@@ -97,17 +101,5 @@ resource "aws_lb_listener" "http" {
       protocol    = "HTTPS"
       status_code = "HTTP_301"
     }
-  }
-}
-
-resource "aws_route53_record" "true_orbit_alb" {
-  zone_id = var.dns_zone_id
-  name    = var.dns_name
-  type    = "A"
-
-  alias {
-    name                   = aws_lb.main.dns_name
-    zone_id                = aws_lb.main.zone_id
-    evaluate_target_health = true
   }
 }

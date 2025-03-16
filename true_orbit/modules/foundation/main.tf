@@ -1,5 +1,7 @@
 resource "aws_vpc" "this" {
   cidr_block = var.vpc_cidr_block
+  enable_dns_support   = true
+  enable_dns_hostnames = true
   tags = {
     Name = "true-orbit-vpc"
     app  = "true-orbit"
@@ -25,18 +27,26 @@ module "public_subnet_a" {
   public      = true
 }
 
+module "route_table_public_a" {
+  source            = "./public_route_table"
+  vpc_id            = aws_vpc.this.id
+  gateway_id        = aws_internet_gateway.gw.id
+  subnet_tags       = module.public_subnet_a.tags
+  subnet_id         = module.public_subnet_a.id
+}
+
 module "nat_gateway_a" {
   source      = "./nat_gateway"
   subnet_id   = module.public_subnet_a.id
   subnet_tags = module.public_subnet_a.tags
 }
 
-module "route_table_a" {
-  source            = "./route_table"
+module "route_table_private_a" {
+  source            = "./private_route_table"
   vpc_id            = aws_vpc.this.id
   nat_gateway_id    = module.nat_gateway_a.id
   subnet_tags       = module.private_subnet_a.tags
-  private_subnet_id = module.private_subnet_a.id
+  subnet_id         = module.private_subnet_a.id
 }
 
 module "private_subnet_a" {
@@ -59,18 +69,26 @@ module "public_subnet_b" {
   public      = true
 }
 
+module "route_table_public_b" {
+  source            = "./public_route_table"
+  vpc_id            = aws_vpc.this.id
+  gateway_id        = aws_internet_gateway.gw.id
+  subnet_tags       = module.public_subnet_b.tags
+  subnet_id         = module.public_subnet_b.id
+}
+
 module "nat_gateway_b" {
   source      = "./nat_gateway"
   subnet_id   = module.public_subnet_b.id
   subnet_tags = module.public_subnet_b.tags
 }
 
-module "route_table_b" {
-  source            = "./route_table"
+module "route_table_private_b" {
+  source            = "./private_route_table"
   vpc_id            = aws_vpc.this.id
   nat_gateway_id    = module.nat_gateway_b.id
   subnet_tags       = module.private_subnet_b.tags
-  private_subnet_id = module.private_subnet_b.id
+  subnet_id         = module.private_subnet_b.id
 }
 
 module "private_subnet_b" {

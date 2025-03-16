@@ -1,14 +1,22 @@
-output "alb_id" {
-  description = "The id of the main alb"
-  value       = aws_lb.main.id
+output "id" {
+  description = "The id of the this alb"
+  value       = aws_lb.this.id
 }
 
-output "alb_arn" {
-  description = "The arn of the main alb"
-  value       = aws_lb.main.arn
+output "arn" {
+  description = "The arn of the this alb"
+  value       = aws_lb.this.arn
 }
 
 output "listener_arn" {
-  description = "The arn of the main alb listener"
+  description = "The arn of the this alb https listener"
   value       = aws_lb_listener.https.arn
+}
+
+output "dns_name" {
+  value = aws_lb.this.dns_name
+}
+
+output "zone_id" {
+  value = aws_lb.this.zone_id
 }

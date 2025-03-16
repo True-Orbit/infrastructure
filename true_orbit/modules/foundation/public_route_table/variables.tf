@@ -9,12 +9,12 @@ variable "cidr_block" {
   default     = "0.0.0.0/0"
 }
 
-variable "nat_gateway_id" {
-  description = "The ID of the NAT gateway"
+variable "gateway_id" {
+  description = "The ID of the internet gateway"
   type        = string
 }
 
-variable "private_subnet_id" {
+variable "subnet_id" {
   description = "The ID of the private subnet"
   type        = string
 }

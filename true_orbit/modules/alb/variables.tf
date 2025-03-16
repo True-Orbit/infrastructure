@@ -26,3 +26,9 @@ variable "dns_zone_id" {
   description = "dns zone id"
   type        = string
 }
+
+variable "internal" {
+  description = "private"
+  type        = bool
+  default     = false
+}

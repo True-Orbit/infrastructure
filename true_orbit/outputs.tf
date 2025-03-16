@@ -16,6 +16,15 @@ output "core_server_secrets" {
   sensitive = true
 }
 
+output "auth_service_image_tag" {
+  value = local.auth_service_image_tag
+}
+
+output "auth_service_secrets" {
+  value     = local.auth_service_secrets
+  sensitive = true
+}
+
 output "vpc_id" {
   value = module.foundation.vpc_id
 }
