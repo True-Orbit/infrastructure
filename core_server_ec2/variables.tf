@@ -62,3 +62,8 @@ variable "seed" {
   description = "Whether to seed the Core Server"
   type        = bool
 }
+
+variable "rollback" {
+  description = "Whether to rollback the migrations of the Core Server"
+  type        = bool
+}

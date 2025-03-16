@@ -110,6 +110,9 @@ resource "aws_instance" "core_server" {
     done
     %{endfor~}
     
+    if [ "${var.rollback}" = "true" ]; then
+      CMD="$CMD && npm run rollback"
+    fi
     if [ "${var.migrate}" = "true" ]; then
       CMD="$CMD && npm run migrate"
     fi
