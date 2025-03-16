@@ -98,7 +98,6 @@ resource "aws_instance" "core_server" {
     $(aws ecr get-login --no-include-email --region ${var.region})
 
     ENV=""
-    CMD="source ./scripts/setDbEnvs.sh"
 
     %{for secret in local.core_server_secrets~}
     export ${secret.name}=$(aws secretsmanager get-secret-value --secret-id ${secret.valueFrom} --query SecretString --output text --region ${var.region})
@@ -110,12 +109,16 @@ resource "aws_instance" "core_server" {
     done
     %{endfor~}
     
+    CMD="source ./scripts/setDbEnvs.sh"
+    
     if [ "${var.rollback}" = "true" ]; then
       CMD="$CMD && npm run rollback"
     fi
+
     if [ "${var.migrate}" = "true" ]; then
       CMD="$CMD && npm run migrate"
     fi
+
     if [ "${var.seed}" = "true" ]; then
       CMD="$CMD && npm run seed"
     fi
