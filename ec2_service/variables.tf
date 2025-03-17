@@ -18,10 +18,6 @@ variable "secrets" {
   default = []
 }
 
-variable "region" {
-  default = "us-west-2"
-}
-
 variable "vpc_id" {
   description = "The ID of the VPC to deploy the Core Server into"
   type        = string
@@ -32,31 +28,9 @@ variable "subnet_id" {
   type        = string
 }
 
-variable "ami_id" {
-  description = "The ID of the AMI to use for the Core Server"
-  type        = string
-  default     = "ami-000089c8d02060104"
-}
-
-variable "s3_bucket" {
-  description = "The name of the S3 bucket to store the Terraform state file"
-  type        = string
-}
-
 variable "repository_name" {
   description = "The name of the ECR repository to pull the Core Server image from"
   type        = string
-}
-
-variable "log_group" {
-  description = "The name of the CloudWatch Log Group to use for the Core Server"
-  type        = string
-}
-
-variable "instance_type" {
-  description = "The instance type to use for the Core Server"
-  type        = string
-  default     = "t3.micro"
 }
 
 variable "migrate" {
@@ -72,4 +46,20 @@ variable "seed" {
 variable "rollback" {
   description = "Whether to rollback the migrations of the Core Server"
   type        = bool
+}
+
+variable "ami_id" {
+  description = "The ID of the AMI to use for the Core Server"
+  type        = string
+  default     = "ami-000089c8d02060104"
+}
+
+variable "region" {
+  default = "us-west-2"
+}
+
+variable "instance_type" {
+  description = "The instance type to use for the Core Server"
+  type        = string
+  default     = "t3.micro"
 }
