@@ -198,3 +198,25 @@ module "vpc_endpoints" {
   private_subnet_ids = [module.foundation.public_subnet_a_id, module.foundation.public_subnet_b_id]
   sg_ids             = [module.web_service.sg_id, module.core_server.sg_id, module.auth_service.sg_id]
 }
+
+
+# Takes the place of the default public alb rule
+resource "aws_lb_listener_rule" "web_service_rule" {
+  listener_arn = module.public_alb.listener_arn
+  priority     = 10000 # something high, this takes the place of the default rule
+
+  tags = {
+    Name = "web-forward"
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = module.web_service.target_group_arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/*"]
+    }
+  }
+}
