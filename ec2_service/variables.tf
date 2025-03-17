@@ -28,6 +28,11 @@ variable "subnet_id" {
   type        = string
 }
 
+variable "port" {
+  description = "The port the Core Server listens on"
+  type        = number
+}
+
 variable "repository_name" {
   description = "The name of the ECR repository to pull the Core Server image from"
   type        = string

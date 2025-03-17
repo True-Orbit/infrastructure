@@ -132,7 +132,7 @@ resource "aws_instance" "this" {
 
     # Pull and run the container image from ECR
     # Replace <repository_uri> and <tag> with your image details.
-    CONTAINER_ID=$(docker run -d -p 3000:3000 $ENV --entrypoint /bin/sh ${data.aws_ecr_repository.this.repository_url}:${var.image_tag} -c "$CMD")
+    CONTAINER_ID=$(docker run -d -p ${var.port}:${var.port} $ENV --entrypoint /bin/sh ${data.aws_ecr_repository.this.repository_url}:${var.image_tag} -c "$CMD")
   EOF
 
   tags = {
