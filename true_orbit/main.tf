@@ -67,7 +67,7 @@ module "foundation" {
 }
 
 module "public_alb" {
-  source         = "./modules/alb"
+  source         = "./modules/public_alb"
   environment    = var.environment
   vpc_id         = module.foundation.vpc_id
   subnet_ids     = [module.foundation.public_subnet_a_id, module.foundation.public_subnet_b_id]
@@ -90,7 +90,7 @@ resource "aws_route53_record" "true_orbit_alb" {
 }
 
 module "private_alb" {
-  source         = "./modules/alb"
+  source         = "./modules/private_alb"
   environment    = var.environment
   vpc_id         = module.foundation.vpc_id
   subnet_ids     = [module.foundation.private_subnet_a_id, module.foundation.private_subnet_b_id]
@@ -151,7 +151,7 @@ module "auth_service" {
   ecs_iam_role_arn  = module.iam.ecs_role_arn
   port              = 3000
   health_check_path = "/auth/health"
-  alb_listener_arn  = module.public_alb.listener_arn
+  alb_listener_arns = [module.public_alb.listener_arn, module.private_alb.listener_arn]
   listener_priority = 10
   listener_paths    = ["/auth/*"]
 }
@@ -169,7 +169,7 @@ module "web_service" {
   ecs_iam_role_arn  = module.iam.ecs_role_arn
   port              = 3001
   health_check_path = "/api/web/health"
-  alb_listener_arn  = module.public_alb.listener_arn
+  alb_listener_arns = [module.public_alb.listener_arn, module.private_alb.listener_arn]
   listener_priority = 20
   listener_paths    = ["/api/web/*"]
 }
@@ -187,7 +187,7 @@ module "core_server" {
   ecs_iam_role_arn  = module.iam.ecs_role_arn
   port              = 4000
   health_check_path = "/api/health"
-  alb_listener_arn  = module.public_alb.listener_arn
+  alb_listener_arns = [module.public_alb.listener_arn, module.private_alb.listener_arn]
   listener_priority = 30
   listener_paths    = ["/api/*"]
 }
@@ -199,11 +199,14 @@ module "vpc_endpoints" {
   sg_ids             = [module.web_service.sg_id, module.core_server.sg_id, module.auth_service.sg_id]
 }
 
+locals {
+  listener_arns = [module.public_alb.listener_arn, module.private_alb.listener_arn]
+}
 
-# Takes the place of the default public alb rule
 resource "aws_lb_listener_rule" "web_service_rule" {
-  listener_arn = module.public_alb.listener_arn
-  priority     = 10000 # something high, this takes the place of the default rule
+  count        = length(local.listener_arns)
+  listener_arn = local.listener_arns[count.index]
+  priority     = 10000
 
   tags = {
     Name = "web-forward"
@@ -211,7 +214,7 @@ resource "aws_lb_listener_rule" "web_service_rule" {
 
   action {
     type             = "forward"
-    target_group_arn = module.web_service.target_group_arn
+    target_group_arn = module.web_service.target_group_arns[count.index]
   }
 
   condition {

@@ -3,7 +3,6 @@ output "sg_id" {
   value       = aws_security_group.this.id
 }
 
-output "target_group_arn" {
-  description = "The ARN of the target group"
-  value       = aws_lb_target_group.this.arn
+output "target_group_arns" {
+  value = aws_lb_target_group.this[*].arn
 }

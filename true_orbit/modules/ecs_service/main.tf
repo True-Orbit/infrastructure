@@ -95,14 +95,21 @@ resource "aws_ecs_service" "this" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.this.arn
+    target_group_arn = aws_lb_target_group.this[0].arn
+    container_name   = "${local.kebab_name}-container"
+    container_port   = var.port
+  }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.this[1].arn
     container_name   = "${local.kebab_name}-container"
     container_port   = var.port
   }
 }
 
 resource "aws_lb_target_group" "this" {
-  name        = "${local.kebab_name}-target-group"
+  count       = length(var.alb_listener_arns)
+  name        = "${local.kebab_name}-${count.index}-target-group"
   port        = var.port
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -118,16 +125,18 @@ resource "aws_lb_target_group" "this" {
 }
 
 resource "aws_lb_listener_rule" "api_rule" {
-  listener_arn = var.alb_listener_arn
-  priority     = var.listener_priority
+  count        = length(var.alb_listener_arns)
+  listener_arn = var.alb_listener_arns[count.index]
+  # Adjust priority if needed. Ensure that each rule gets a unique priority.
+  priority = var.listener_priority + count.index
 
   tags = {
-    Name = "${local.kebab_name}-forward"
+    Name = "${local.kebab_name}-forward-${count.index}"
   }
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.this.arn
+    target_group_arn = aws_lb_target_group.this[count.index].arn
   }
 
   condition {
