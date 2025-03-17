@@ -118,9 +118,9 @@ resource "aws_lb_target_group" "this" {
 }
 
 resource "aws_lb_listener_rule" "api_rule" {
-  count         = length(var.alb_listener_arns)
-  listener_arn  = var.alb_listener_arns[count.index]
-  priority      = var.listener_priority
+  count        = length(var.alb_listener_arns)
+  listener_arn = var.alb_listener_arns[count.index]
+  priority     = var.listener_priority
 
   tags = {
     Name = "${local.kebab_name}-forward"

@@ -151,7 +151,7 @@ module "auth_service" {
   ecs_iam_role_arn  = module.iam.ecs_role_arn
   port              = 3000
   health_check_path = "/auth/health"
-  alb_listener_arns  = [module.public_alb.listener_arn, module.private_alb.listener_arn]
+  alb_listener_arns = [module.public_alb.listener_arn, module.private_alb.listener_arn]
   listener_priority = 10
   listener_paths    = ["/auth/*"]
 }
@@ -169,7 +169,7 @@ module "web_service" {
   ecs_iam_role_arn  = module.iam.ecs_role_arn
   port              = 3001
   health_check_path = "/api/web/health"
-  alb_listener_arns  = [module.public_alb.listener_arn, module.private_alb.listener_arn]
+  alb_listener_arns = [module.public_alb.listener_arn, module.private_alb.listener_arn]
   listener_priority = 20
   listener_paths    = ["/api/web/*"]
 }
@@ -187,7 +187,7 @@ module "core_server" {
   ecs_iam_role_arn  = module.iam.ecs_role_arn
   port              = 4000
   health_check_path = "/api/health"
-  alb_listener_arns  = [module.public_alb.listener_arn, module.private_alb.listener_arn]
+  alb_listener_arns = [module.public_alb.listener_arn, module.private_alb.listener_arn]
   listener_priority = 30
   listener_paths    = ["/api/*"]
 }
