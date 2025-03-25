@@ -104,8 +104,6 @@ resource "aws_instance" "this" {
 
     ENV=""
 
-    curl -I https://www.google.com
-
     %{for secret in var.secrets~}
     export ${secret.name}=$(aws secretsmanager get-secret-value --secret-id ${secret.valueFrom} --query SecretString --output text --region ${var.region})
     echo "Loaded secret ${secret.name}"

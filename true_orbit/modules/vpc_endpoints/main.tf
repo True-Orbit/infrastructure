@@ -11,6 +11,14 @@ resource "aws_security_group" "vpc_endpoint_sg" {
     security_groups = var.sg_ids
   }
 
+  ingress {
+    description = "Allow inbound HTTPS traffic for EC2 instances on public subnet 1"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.1.0/24"]
+  }
+
   egress {
     description = "Allow all outbound traffic"
     from_port   = 0
