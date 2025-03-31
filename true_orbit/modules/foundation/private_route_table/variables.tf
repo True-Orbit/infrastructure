@@ -9,17 +9,17 @@ variable "cidr_block" {
   default     = "0.0.0.0/0"
 }
 
-variable "nat_gateway_id" {
-  description = "The ID of the NAT gateway"
-  type        = string
-}
-
-variable "subnet_id" {
+variable "subnet_ids" {
   description = "The ID of the private subnet"
-  type        = string
+  type        = list(string)
 }
 
 variable "subnet_tags" {
   description = "Tags to apply to the private subnet"
   type        = map(string)
+}
+
+variable "nat_instance_primary_network_interface_id" {
+  description = "The ID of the NAT instance"
+  type        = string
 }

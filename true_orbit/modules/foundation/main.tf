@@ -35,18 +35,10 @@ module "route_table_public_a" {
   subnet_id   = module.public_subnet_a.id
 }
 
-module "nat_gateway_a" {
-  source      = "./nat_gateway"
-  subnet_id   = module.public_subnet_a.id
-  subnet_tags = module.public_subnet_a.tags
-}
-
-module "route_table_private_a" {
-  source         = "./private_route_table"
-  vpc_id         = aws_vpc.this.id
-  nat_gateway_id = module.nat_gateway_a.id
-  subnet_tags    = module.private_subnet_a.tags
-  subnet_id      = module.private_subnet_a.id
+module "nat_instance" {
+  source           = "./nat_instance"
+  vpc_id           = aws_vpc.this.id
+  public_subnet_id = module.public_subnet_a.id
 }
 
 module "private_subnet_a" {
@@ -77,18 +69,12 @@ module "route_table_public_b" {
   subnet_id   = module.public_subnet_b.id
 }
 
-module "nat_gateway_b" {
-  source      = "./nat_gateway"
-  subnet_id   = module.public_subnet_b.id
-  subnet_tags = module.public_subnet_b.tags
-}
-
 module "route_table_private_b" {
-  source         = "./private_route_table"
-  vpc_id         = aws_vpc.this.id
-  nat_gateway_id = module.nat_gateway_b.id
-  subnet_tags    = module.private_subnet_b.tags
-  subnet_id      = module.private_subnet_b.id
+  source                                    = "./private_route_table"
+  vpc_id                                    = aws_vpc.this.id
+  subnet_tags                               = module.private_subnet_b.tags
+  subnet_ids                                = [module.private_subnet_a.id, module.private_subnet_b.id]
+  nat_instance_primary_network_interface_id = module.nat_instance.primary_network_interface_id
 }
 
 module "private_subnet_b" {
