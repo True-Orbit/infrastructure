@@ -18,6 +18,7 @@ resource "aws_instance" "nat_instance" {
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.nat_sg.id]
   disable_api_termination     = false
+  source_dest_check           = false
 
   # Enable IP forwarding and set up NAT via user data script
   user_data = <<-EOF
@@ -32,4 +33,8 @@ resource "aws_instance" "nat_instance" {
   tags = {
     Name = "NAT-Instance"
   }
+}
+
+resource "aws_eip" "nat_eip" {
+  instance = aws_instance.nat_instance.id
 }

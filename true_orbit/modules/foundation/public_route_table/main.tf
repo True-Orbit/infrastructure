@@ -1,6 +1,6 @@
 locals {
+  sector      = "public"
   subnet_name = var.subnet_tags["Name"]
-  sector      = var.subnet_tags["sector"]
   environment = var.subnet_tags["environment"]
   app         = var.subnet_tags["app"]
   az          = var.subnet_tags["az"]

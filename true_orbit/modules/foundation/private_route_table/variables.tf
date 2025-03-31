@@ -9,9 +9,9 @@ variable "cidr_block" {
   default     = "0.0.0.0/0"
 }
 
-variable "subnet_id" {
+variable "subnet_ids" {
   description = "The ID of the private subnet"
-  type        = string
+  type        = list(string)
 }
 
 variable "subnet_tags" {
