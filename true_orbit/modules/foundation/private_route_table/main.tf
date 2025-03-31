@@ -23,6 +23,12 @@ resource "aws_route_table" "this" {
   }
 }
 
+resource "aws_route" "private_nat_route" {
+  route_table_id         = aws_route_table.this.id
+  destination_cidr_block = "0.0.0.0/0"
+  instance_id            = var.nat_instance_id
+}
+
 resource "aws_route_table_association" "private_subnet_association" {
   subnet_id      = var.subnet_id
   route_table_id = aws_route_table.this.id

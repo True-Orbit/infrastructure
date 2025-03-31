@@ -23,3 +23,8 @@ variable "subnet_tags" {
   description = "Tags to apply to the private subnet"
   type        = map(string)
 }
+
+variable "nat_instance_id" {
+  description = "The ID of the NAT instance"
+  type        = string
+}
