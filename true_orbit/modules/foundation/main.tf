@@ -44,10 +44,9 @@ module "nat_instance" {
 module "route_table_private_a" {
   source         = "./private_route_table"
   vpc_id         = aws_vpc.this.id
-  nat_gateway_id = module.nat_gateway_a.id
   subnet_tags    = module.private_subnet_a.tags
   subnet_id      = module.private_subnet_a.id
-  nat_instance_id = module.nat_instance.id
+  nat_instance_primary_network_interface_id = module.nat_instance.primary_network_interface_id
 }
 
 module "private_subnet_a" {
@@ -81,10 +80,9 @@ module "route_table_public_b" {
 module "route_table_private_b" {
   source         = "./private_route_table"
   vpc_id         = aws_vpc.this.id
-  nat_gateway_id = module.nat_gateway_b.id
   subnet_tags    = module.private_subnet_b.tags
   subnet_id      = module.private_subnet_b.id
-  nat_instance_id = module.nat_instance.id
+  nat_instance_primary_network_interface_id = module.nat_instance.primary_network_interface_id
 }
 
 module "private_subnet_b" {

@@ -9,11 +9,6 @@ locals {
 resource "aws_route_table" "this" {
   vpc_id = var.vpc_id
 
-  route {
-    cidr_block     = var.cidr_block
-    nat_gateway_id = var.nat_gateway_id
-  }
-
   tags = {
     Name        = "${local.sector}-route-table-${local.subnet_name}"
     sector      = local.sector
@@ -26,7 +21,7 @@ resource "aws_route_table" "this" {
 resource "aws_route" "private_nat_route" {
   route_table_id         = aws_route_table.this.id
   destination_cidr_block = "0.0.0.0/0"
-  instance_id            = var.nat_instance_id
+  network_interface_id            = var.nat_instance_primary_network_interface_id
 }
 
 resource "aws_route_table_association" "private_subnet_association" {
