@@ -32,3 +32,7 @@ output "vpc_id" {
 output "public_subnet_id" {
   value = module.foundation.public_subnet_a_id
 }
+
+output "nat_instance_sg_id" {
+  value = module.foundation.nat_instance_sg_id
+}

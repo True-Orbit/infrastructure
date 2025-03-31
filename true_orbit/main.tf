@@ -196,7 +196,7 @@ module "vpc_endpoints" {
   source             = "./modules/vpc_endpoints"
   vpc_id             = module.foundation.vpc_id
   private_subnet_ids = [module.foundation.public_subnet_a_id, module.foundation.public_subnet_b_id]
-  sg_ids             = [module.web_service.sg_id, module.core_server.sg_id, module.auth_service.sg_id]
+  sg_ids             = [module.web_service.sg_id, module.core_server.sg_id, module.auth_service.sg_id, module.foundation.nat_instance_sg_id]
 }
 
 locals {

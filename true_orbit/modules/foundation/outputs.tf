@@ -27,3 +27,8 @@ output "ecs_cluster_id" {
   description = "The ID of the ECS cluster"
   value       = aws_ecs_cluster.this.id
 }
+
+output "nat_instance_sg_id" {
+  description = "The ID of the NAT instance security group"
+  value       = module.nat_instance.nat_instance_sg_id
+}
