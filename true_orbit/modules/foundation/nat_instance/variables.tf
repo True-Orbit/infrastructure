@@ -1,11 +1,11 @@
 variable "vpc_id" {
   description = "The ID of the VPC"
-  type = string
+  type        = string
 }
 
 variable "public_subnet_id" {
   description = "The ID of the public subnet"
-  type = string
+  type        = string
 }
 
 variable "ami_id" {

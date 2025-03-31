@@ -17,7 +17,7 @@ resource "aws_instance" "nat_instance" {
   subnet_id                   = var.public_subnet_id
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.nat_sg.id]
-  disable_api_termination = false
+  disable_api_termination     = false
 
   # Enable IP forwarding and set up NAT via user data script
   user_data = <<-EOF
