@@ -43,7 +43,14 @@
   ```
   - add `local.trueorbit.me` to your /etc/hosts file
 
+  - On mac, copy the local.trueorbit.me.pem to keychain access system/certificates
+  - Then double click the cert in keychain, and set always trust
+
   - restart Nginx
+
+  - restart your browser
+
+  - Navigate to https://local.trueorbit.me (https, the s is important)
 
 ### Terraform Plan / Apply
   - Secrets
